@@ -26,8 +26,7 @@ import negotiator.AgentID;
 import negotiator.Bid;
 import negotiator.Domain;
 import negotiator.WorldInformation;
-import negotiator.actions.Action;
-import negotiator.actions.Offer;
+import negotiator.actions.*;
 import negotiator.exceptions.NegotiatorException;
 import negotiator.exceptions.UnknownIssueException;
 import negotiator.exceptions.UnknownValueException;
@@ -61,6 +60,8 @@ public class NegotiationClient implements IOCallback {
 	 */
 	private Agent agent;
 	
+	private AgentID agentId, partnerAgentId;
+	
 	private Domain domain;
 	
 	/**
@@ -71,12 +72,23 @@ public class NegotiationClient implements IOCallback {
 	 *  @see  negotiator.protocol.Protocol#loadWorldInformation
 	 */
 	private void initializeAgent(String role, String partnerRole) throws IOException, NegotiatorException {
+		agentId = new AgentID(role);
+		partnerAgentId = new AgentID(partnerRole);
+		
 		agent = new KBAgent();
 		agent.setName(role);
-		agent.setAgentID(new AgentID(role));
+		agent.setAgentID(agentId);
+		
+		/* handle actions from our agent to the partner */
 		agent.setActionListener(new ActionListener() {
 			@Override public void actionSent(Action a) {
-				socket.send("I do: "+a.toString());
+				if (a instanceof BidAction) {
+					socket.emit("offer", a);
+				} else if (a instanceof Accept) {
+					socket.emit("accept", ((AcceptOrReject)a).getAcceptedOrRejectedAction());
+				} else if (a instanceof Reject) {
+					socket.emit("reject", ((AcceptOrReject)a).getAcceptedOrRejectedAction());
+				}
 			}
 		});
 
@@ -143,8 +155,9 @@ public class NegotiationClient implements IOCallback {
 		System.out.println("Connection established");
 	}
 
+	/* Handle actions from the partner or from the server to our agent */
 	@Override public void on(String event, IOAcknowledge ack, Object... args) {
-		System.out.println("Server triggered event '" + event + "'.");
+		System.out.println("Server triggered event '" + event + "' arg0="+args[0]);
 		try {
 			if (event.equals("message")) {
 				JSONObject arg0 = (JSONObject)args[0];
@@ -177,9 +190,17 @@ public class NegotiationClient implements IOCallback {
 					Bid theBid = new Bid(domain, demandedBidValues);
 					//if (bidTime!=null)
 					//	theBid.setTime(bidTime);
-					Action theAction = new Offer(agent.getAgentID(), theBid);
+					Action theAction = new Offer(partnerAgentId, theBid);
 					agent.ReceiveMessage(theAction);
 				}
+			} else if (event.equals("EndTurn")) {
+				int turnsFromStart = (Integer)args[0];
+				Action theAction = new EndTurn(turnsFromStart);
+				agent.ReceiveMessage(theAction);
+			} else if (event.equals("accept")) {
+				agent.ReceiveMessage(new Accept());
+			} else if (event.equals("reject")) {
+				agent.ReceiveMessage(new Reject());
 			}
 		} catch (JSONException | UnknownIssueException | UnknownValueException e) {
 			e.printStackTrace();
