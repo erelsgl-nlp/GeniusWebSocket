@@ -8,10 +8,8 @@ package geniuswebsocket;
  * See LICENSE file for more information
  */
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import io.socket.IOAcknowledge;
 import io.socket.IOCallback;
@@ -46,40 +44,66 @@ import agents.biu.KBAgent;
  * @author Erel Segal Halevi
  * @since 2013-02
  */
-public class NegotiationClient implements IOCallback {
+public class NegotiationClient implements IOCallback, Cloneable {
+	private String roleOfThisAgent, roleOfOtherPlayer;
+	private AgentID agentIdOfThisAgent, agentIdOfOtherPlayer;
+	
 	/**
 	 * socket for connecting to the Node.js negotiation server:
 	 */
 	private SocketIO socket;
 	
+	/**
+	 * agent for strategic negotiation
+	 */
+	protected Agent agent;
 	
 	/**
-	 * agent for strategic negotiation:
+	 * Genius negotiation domain 
 	 */
-	private Agent agent;
-	
-	private AgentID agentId, partnerAgentId;
-	
 	private Domain domain;
 	
+	/**
+	 * full URL (http://host:port) of the socket.io server that handles the negotiation. 
+	 */
+	private String serverUrl;
+	
+	/**
+	 * name of the game-class to join - from the games available on the game-server
+	 */
+	private String gameType;
 
-	public NegotiationClient() throws Exception {
-		String role = "Candidate";
-		String otherRole = "Employer";
-		domain = new Domain("/host/workspace/GeniusBI/etc/templates/JobCandiate/JobCanDomain.xml");
-		initializeAgent(role, otherRole);
+
+	/**
+	 * @param domainFile full path to the Genius XML file with the domain data. 
+	 * @param serverUrl full URL (http://host:port) of the socket.io game-server that handles the negotiation.
+	 * @param gameType name of the game-class to join - from the games available on the game-server.
+	 * @throws Exception
+	 */
+	public NegotiationClient(Domain domain, String serverUrl, String gameType) {
+		this.domain = domain;
+		this.serverUrl = serverUrl;
+		this.gameType = gameType;
+		
+		roleOfThisAgent = "Candidate";
+		roleOfOtherPlayer = "Employer";
 	}
 	
-	public void connect() throws JSONException, MalformedURLException {
+	@Override public NegotiationClient clone() {
+		return new NegotiationClient(domain, serverUrl, gameType);
+	}
+	
+	public void start() throws JSONException, IOException, NegotiatorException {
+		initializeAgent(roleOfThisAgent, roleOfOtherPlayer);
+
 		socket = new SocketIO();
-		socket.connect("http://localhost:4000/", this);
+		socket.connect(serverUrl, this);
 
 		socket.emit("start_session", new JSONObject()
 			.put("userid", "Java "+new Date().toString())
-			.put("gametype", "negomenus")
-			.put("role", "Candidate")
+			.put("gametype", gameType)
+			.put("role", roleOfThisAgent)
 			);
-		socket.send("Hello! I am the "+agentId);
 	}
 	
 	/**
@@ -89,13 +113,13 @@ public class NegotiationClient implements IOCallback {
 	 *  @see  negotiator.protocol.asyncoffers.AsyncOffersBilateralAtomicNegoSession#run
 	 *  @see  negotiator.protocol.Protocol#loadWorldInformation
 	 */
-	private void initializeAgent(String role, String partnerRole) throws IOException, NegotiatorException {
-		agentId = new AgentID(role);
-		partnerAgentId = new AgentID(partnerRole);
+	protected void initializeAgent(String role, String partnerRole) throws IOException, NegotiatorException {
+		agentIdOfThisAgent = new AgentID(role);
+		agentIdOfOtherPlayer = new AgentID(partnerRole);
 		
 		agent = new KBAgent();
 		agent.setName(role);
-		agent.setAgentID(agentId);
+		agent.setAgentID(agentIdOfThisAgent);
 		
 		/* handle actions from our agent to the partner */
 		agent.setActionListener(new ActionListener() {
@@ -126,11 +150,10 @@ public class NegotiationClient implements IOCallback {
 			agentUtilitySpace, agentParams, agentWorldInformation);
 		agent.init();
 	}
-	
-	@Override public void onMessage(JSONObject json, IOAcknowledge ack) {
+
+	@Override public void onMessage(JSONObject arg0, IOAcknowledge ack) {
 		try {
-			System.out.println("Server said:" + json.toString(2));
-			socket.send("You just said '"+json.toString(2)+"'");
+			System.out.println("Server said: " + arg0.toString(2));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -138,7 +161,6 @@ public class NegotiationClient implements IOCallback {
 
 	@Override public void onMessage(String data, IOAcknowledge ack) {
 		System.out.println("Server said: " + data);
-		socket.send("You just said '"+data+"'");
 	}
 
 	@Override public void onError(SocketIOException socketIOException) {
@@ -153,79 +175,146 @@ public class NegotiationClient implements IOCallback {
 	@Override public void onConnect() {
 		System.out.println("Connection established");
 	}
-
+	
+	
 	/* Handle actions from the partner or from the server to our agent */
 	@Override public void on(String event, IOAcknowledge ack, Object... args) {
 		System.out.println("Server triggered event '" + event + "' arg0="+args[0]);
 		try {
-			if (event.equals("message")) {
-				JSONObject arg0 = (JSONObject)args[0];
-				System.out.println("\t"+arg0.get("id") + " said: "+arg0.get("msg"));
-			} else if (event.equals("status")) {  // status sent by the server:
+			if (event.equals("status")) {  // status sent by the server:
 				JSONObject arg0 = (JSONObject)args[0];
 				if (arg0.get("key").equals("phase") && arg0.get("value").equals("")) { 
-					System.out.println("\tGame starts - launching a new client!");
-					new NegotiationClient().connect();
-				}
-			} else if (event.equals("offer")) {  // offer created by the other partner:
-				JSONObject arg0 = (JSONObject)args[0];
-				System.out.println(arg0.toString(2));
-				HashMap<Integer, Value> demandedBidValues = new HashMap<Integer, Value>();  // collect specific-issue actions
-				for (Iterator<?> iIssue = arg0.keys(); iIssue.hasNext();) {
-					String issueName = (String)iIssue.next();
-					if (issueName.isEmpty()) continue;
-					String valueName = arg0.getString(issueName);
-					if (valueName.isEmpty()) continue;
-
-					Issue issue = domain.issueByName(issueName);
-					if (issue==null)
-						throw new UnknownIssueException(issueName);
-					switch(issue.getType()) {
-						case DISCRETE:
-							IssueDiscrete issueDiscrete = (IssueDiscrete)issue;
-							Value value = issueDiscrete.valueByName(valueName);
-							if (value==null)
-								throw new UnknownValueException(issueDiscrete, valueName);
-							demandedBidValues.put(issue.getNumber(), value);
-							break;
-						default:
-							throw new UnsupportedOperationException("Only discrete types are supported currently!");
-					}
-				}
-
-				if (!demandedBidValues.isEmpty()) {
-					Bid theBid = new Bid(domain, demandedBidValues);
-					//if (bidTime!=null)
-					//	theBid.setTime(bidTime);
-					Action theAction = new Offer(partnerAgentId, theBid);
-					agent.ReceiveMessage(theAction);
+					System.out.println("  Game starts - launching a new client!");
+					final NegotiationClient newClient = clone();
+					new Thread() {
+						public void run() {
+							try {
+								newClient.start();
+							} catch (JSONException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							} catch (NegotiatorException e) {
+								e.printStackTrace();
+							}
+						}
+					}.start();
 				}
 			} else if (event.equals("EndTurn")) {
 				int turnsFromStart = (Integer)args[0];
 				Action theAction = new EndTurn(turnsFromStart);
 				agent.ReceiveMessage(theAction);
+			} else if (event.equals("offer")) {  // offer created by the other partner:
+				onPartnerOffer((JSONObject)args[0]);
 			} else if (event.equals("accept")) {
-				agent.ReceiveMessage(new Accept());
+				onPartnerAccept();
 			} else if (event.equals("reject")) {
-				agent.ReceiveMessage(new Reject());
+				onPartnerReject();
+			} else if (event.equals("message")) {
+				if (args[0] instanceof JSONObject) {
+					JSONObject arg0 = (JSONObject)args[0];
+					String speaker = (String)arg0.get("id");
+					String action = (String)arg0.get("action");
+					String msg = (String)arg0.get("msg");
+					boolean you = (Boolean)arg0.get("you");
+					System.out.println("  "+speaker + (you? " (you)": "")+": "+action+" "+msg);
+					if (!you) {
+						if (action.equals("Message"))
+							onNaturalLanguageMessage(msg);
+						else if (action.equals("Connect"))
+							onPartnerConnect();
+						else if (action.equals("Disconnect"))
+							onPartnerDisconnect();
+					}
+				} else {
+					String arg0 = (String)args[0];
+					onMessage(arg0, ack);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	
+	
+	/*
+	 * Negotiation-specific event handlers:
+	 */
 
+	public void onPartnerConnect()  {
+		socket.emit("message", "Hello! I am the "+agentIdOfThisAgent);
+	}
 	
 	/**
-	 * @param args
+	 * @param jsonBid a JSON object that represents a bid - {issue1:value1, issue2:value2, ...}
 	 */
-	public static void main(String[] args) {
-		try {
-			Logger sioLogger = java.util.logging.Logger.getLogger("io.socket");
-			sioLogger.setLevel(Level.OFF);
-			new NegotiationClient().connect();  // Start the first client. It will launch new clients as the need arises.
-		} catch (Exception e) {
-			e.printStackTrace();
+	public void onPartnerOffer(JSONObject jsonBid) throws JSONException, UnknownIssueException, UnknownValueException {
+		//System.out.println(arg0.toString(2));
+		HashMap<Integer, Value> demandedBidValues = new HashMap<Integer, Value>();  // collect specific-issue actions
+		for (Iterator<?> iIssue = jsonBid.keys(); iIssue.hasNext();) {
+			String issueName = (String)iIssue.next();
+			if (issueName.isEmpty()) continue;
+			String valueName = jsonBid.getString(issueName);
+			if (valueName.isEmpty()) continue;
+
+			Issue issue = domain.issueByName(issueName);
+			if (issue==null)
+				throw new UnknownIssueException(issueName);
+			switch(issue.getType()) {
+				case DISCRETE:
+					IssueDiscrete issueDiscrete = (IssueDiscrete)issue;
+					Value value = issueDiscrete.valueByName(valueName);
+					if (value==null)
+						throw new UnknownValueException(issueDiscrete, valueName);
+					demandedBidValues.put(issue.getNumber(), value);
+					break;
+				default:
+					throw new UnsupportedOperationException("Only discrete types are supported currently!");
+			}
 		}
+
+		if (!demandedBidValues.isEmpty()) {
+			Bid theBid = new Bid(domain, demandedBidValues);
+			//if (bidTime!=null)
+			//	theBid.setTime(bidTime);
+			Action theAction = new Offer(agentIdOfOtherPlayer, theBid);
+			agent.ReceiveMessage(theAction);
+		}
+	}
+
+	public void onPartnerAccept() {
+		agent.ReceiveMessage(new Accept());
+	}
+
+	public void onPartnerReject() {
+		agent.ReceiveMessage(new Reject());
+	}
+
+	public void onNaturalLanguageMessage(String message) {
+		socket.emit("message", "I didn't understsand your message '"+message+"'. Please say it in other words.");
+	}
+
+	public void onPartnerQuit()  {
+		agent.ReceiveMessage(new EndNegotiation());
+	}
+
+	public void onPartnerDisconnect()  {
+		socket.emit("message", "Bye!");
+	}
+	
+	/*
+	 * Main program:
+	 */
+	
+	private static String thisClassName = Thread.currentThread().getStackTrace()[1].getClassName();
+	
+	public static void main(String[] args) throws Exception {
+		if (args.length<3) {
+			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-type>");
+			System.exit(1);
+		}
+		java.util.logging.Logger.getLogger("io.socket").setLevel(Level.WARNING);
+		new NegotiationClient(new Domain(args[0]), args[1], args[2]).start();  // Start the first client. It will launch new clients as the need arises.
 	}
 }
