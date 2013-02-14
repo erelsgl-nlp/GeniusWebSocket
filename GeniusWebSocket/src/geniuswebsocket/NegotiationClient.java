@@ -8,12 +8,10 @@ package geniuswebsocket;
  * See LICENSE file for more information
  */
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
+import java.net.MalformedURLException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.socket.IOAcknowledge;
 import io.socket.IOCallback;
@@ -64,6 +62,26 @@ public class NegotiationClient implements IOCallback {
 	
 	private Domain domain;
 	
+
+	public NegotiationClient() throws Exception {
+		String role = "Candidate";
+		String otherRole = "Employer";
+		domain = new Domain("/host/workspace/GeniusBI/etc/templates/JobCandiate/JobCanDomain.xml");
+		initializeAgent(role, otherRole);
+	}
+	
+	public void connect() throws JSONException, MalformedURLException {
+		socket = new SocketIO();
+		socket.connect("http://localhost:4000/", this);
+
+		socket.emit("start_session", new JSONObject()
+			.put("userid", "Java "+new Date().toString())
+			.put("gametype", "negomenus")
+			.put("role", "Candidate")
+			);
+		socket.send("Hello! I am the "+agentId);
+	}
+	
 	/**
 	 *  @throws IOException 
 	 * @throws NegotiatorException 
@@ -109,25 +127,6 @@ public class NegotiationClient implements IOCallback {
 		agent.init();
 	}
 	
-
-	public NegotiationClient() throws Exception {
-		String role = "Candidate";
-		String otherRole = "Employer";
-		domain = new Domain("/host/workspace/GeniusBI/etc/templates/JobCandiate/JobCanDomain.xml");
-		initializeAgent(role, otherRole);
-	
-		socket = new SocketIO();
-		socket.connect("http://localhost:4000/", this);
-
-		socket.emit("start_session", new JSONObject()
-			.put("userid", "Java "+new Date().toString())
-			.put("gametype", "menus_humanvshuman")
-			.put("role", "Candidate")
-			);
-
-		socket.send("Hello! I am the "+role);
-	}
-
 	@Override public void onMessage(JSONObject json, IOAcknowledge ack) {
 		try {
 			System.out.println("Server said:" + json.toString(2));
@@ -162,13 +161,21 @@ public class NegotiationClient implements IOCallback {
 			if (event.equals("message")) {
 				JSONObject arg0 = (JSONObject)args[0];
 				System.out.println("\t"+arg0.get("id") + " said: "+arg0.get("msg"));
-			} else if (event.equals("offer")) {
+			} else if (event.equals("status")) {  // status sent by the server:
+				JSONObject arg0 = (JSONObject)args[0];
+				if (arg0.get("key").equals("phase") && arg0.get("value").equals("")) { 
+					System.out.println("\tGame starts - launching a new client!");
+					new NegotiationClient().connect();
+				}
+			} else if (event.equals("offer")) {  // offer created by the other partner:
 				JSONObject arg0 = (JSONObject)args[0];
 				System.out.println(arg0.toString(2));
 				HashMap<Integer, Value> demandedBidValues = new HashMap<Integer, Value>();  // collect specific-issue actions
 				for (Iterator<?> iIssue = arg0.keys(); iIssue.hasNext();) {
 					String issueName = (String)iIssue.next();
+					if (issueName.isEmpty()) continue;
 					String valueName = arg0.getString(issueName);
+					if (valueName.isEmpty()) continue;
 
 					Issue issue = domain.issueByName(issueName);
 					if (issue==null)
@@ -202,7 +209,7 @@ public class NegotiationClient implements IOCallback {
 			} else if (event.equals("reject")) {
 				agent.ReceiveMessage(new Reject());
 			}
-		} catch (JSONException | UnknownIssueException | UnknownValueException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -214,7 +221,9 @@ public class NegotiationClient implements IOCallback {
 	 */
 	public static void main(String[] args) {
 		try {
-			new NegotiationClient();
+			Logger sioLogger = java.util.logging.Logger.getLogger("io.socket");
+			sioLogger.setLevel(Level.OFF);
+			new NegotiationClient().connect();  // Start the first client. It will launch new clients as the need arises.
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
