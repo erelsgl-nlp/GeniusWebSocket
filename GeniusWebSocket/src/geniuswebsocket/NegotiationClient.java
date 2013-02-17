@@ -51,7 +51,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	/**
 	 * socket for connecting to the Node.js negotiation server:
 	 */
-	protected SocketIO socket;
+	protected SocketIO negotiationSocket;
 	
 	/**
 	 * agent for strategic negotiation
@@ -96,10 +96,10 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	public void start() throws JSONException, IOException, NegotiatorException {
 		initializeAgent(roleOfThisAgent, roleOfOtherPlayer);
 
-		socket = new SocketIO();
-		socket.connect(serverUrl, this);
+		negotiationSocket = new SocketIO();
+		negotiationSocket.connect(serverUrl, this);
 
-		socket.emit("start_session", new JSONObject()
+		negotiationSocket.emit("start_session", new JSONObject()
 			.put("userid", "Java "+new Date().toString())
 			.put("gametype", gameType)
 			.put("role", roleOfThisAgent)
@@ -125,11 +125,11 @@ public class NegotiationClient implements IOCallback, Cloneable {
 		agent.setActionListener(new ActionListener() {
 			@Override public void actionSent(Action a) {
 				if (a instanceof BidAction) {
-					socket.emit("offer", a);
+					negotiationSocket.emit("offer", a);
 				} else if (a instanceof Accept) {
-					socket.emit("accept", ((AcceptOrReject)a).getAcceptedOrRejectedAction());
+					negotiationSocket.emit("accept", ((AcceptOrReject)a).getAcceptedOrRejectedAction());
 				} else if (a instanceof Reject) {
-					socket.emit("reject", ((AcceptOrReject)a).getAcceptedOrRejectedAction());
+					negotiationSocket.emit("reject", ((AcceptOrReject)a).getAcceptedOrRejectedAction());
 				}
 			}
 		});
@@ -151,35 +151,35 @@ public class NegotiationClient implements IOCallback, Cloneable {
 		agent.init();
 	}
 
+	@Override public void onConnect() {
+		System.out.println("NegotiationClient Connection established.");
+	}
+
 	@Override public void onMessage(JSONObject arg0, IOAcknowledge ack) {
 		try {
-			System.out.println("Server said: " + arg0.toString(2));
+			System.out.println("NegotiationClient receives an object: " + arg0.toString(2));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override public void onMessage(String data, IOAcknowledge ack) {
-		System.out.println("Server said: " + data);
+		System.out.println("NegotiationClient receives a message: " + data);
 	}
 
 	@Override public void onError(SocketIOException socketIOException) {
-		System.out.println("an Error occured");
+		System.out.println("NegotiationClient receives an error:");
 		socketIOException.printStackTrace();
 	}
 
 	@Override public void onDisconnect() {
-		System.out.println("Connection terminated.");
-	}
-
-	@Override public void onConnect() {
-		System.out.println("Connection established");
+		System.out.println("NegotiationClient Connection terminated.");
 	}
 	
 	
 	/* Handle actions from the partner or from the server to our agent */
 	@Override public void on(String event, IOAcknowledge ack, Object... args) {
-		System.out.println("Server triggered event '" + event + "' arg0="+args[0]);
+		System.out.println("NegotiationClient receives event '" + event + "' arg0="+args[0]);
 		try {
 			if (event.equals("status")) {  // status sent by the server:
 				JSONObject arg0 = (JSONObject)args[0];
@@ -243,7 +243,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	 */
 
 	public void onPartnerConnect()  {
-		socket.emit("message", "Hello! I am the "+agentIdOfThisAgent);
+		sayToNegotiationServer("Hello! I am the "+agentIdOfThisAgent);
 	}
 	
 	/**
@@ -292,7 +292,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	}
 
 	public void onNaturalLanguageMessage(String message) {
-		socket.emit("message", "I didn't understsand your message '"+message+"'. Please say it in other words.");
+		sayToNegotiationServer("I didn't understsand your message '"+message+"'. Please say it in other words.");
 	}
 
 	public void onPartnerQuit()  {
@@ -300,7 +300,11 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	}
 
 	public void onPartnerDisconnect()  {
-		socket.emit("message", "Bye!");
+		sayToNegotiationServer("Bye!");
+	}
+	
+	public void sayToNegotiationServer(String message) {
+		negotiationSocket.emit("message",message);
 	}
 	
 	/*

@@ -1,34 +1,7 @@
 <!DOCTYPE page [
-<!ENTITY traincorpus "REASONABLE_GUESS">
-<!ENTITY traincorpus1 "RTE3">
-<!ENTITY traincorpus3 "jobcandidate_balanced_all_7">
-<!ENTITY traincorpus2 "twins_filtered5_balanced_all_7">
-
-<!ENTITY trainengine2 "NoTruthTeller__NoCoreference__WORDNET,CATVAR,WIKIPEDIA,BAP,VERB_OCEAN,UNARY_BINC__R16024">
-<!ENTITY trainengine1 "NoTruthTeller__NoCoreference__NoKnowledge__R16024">
-<!ENTITY trainengine "NoTruthTeller__NoCoreference__WORDNET,CATVAR__R16024">
-
-<!ENTITY biutee_knowledge_resources "UNARY_LIN,VERB_OCEAN,CATVAR">
-<!ENTITY plis_knowledge_resources "">
-<!ENTITY plis_transitivity "2">
-
-<!ENTITY biutee_knowledge_resources0 "">
-<!ENTITY plis_knowledge_resources0 "">
-
-<!ENTITY biutee_knowledge_resources2 "WORDNET,CATVAR,VERB_OCEAN">
-<!ENTITY plis_knowledge_resources2 "catvarV2,WNV2,VerbOceanV2">
-
-<!ENTITY default_textual_entailer "biutee">
-<!ENTITY default_textual_entailer1 "plis with variables">
-
-
 ]>
 
 <configuration>
-	<module name="experiment">
-		<param name="traincorpus">&traincorpus;</param>
-		<param name="trainengine">&trainengine;</param>
-	</module>
 	<module name = "preprocessing for biutee">
 		<param name = "class">PreprocessClient</param>
 		<param name = "preprocess_host">nlp-srv</param>
@@ -75,7 +48,8 @@
 		<param name = "preprocessModule">preprocessing for biutee</param>
 		<param name = "allowVariablesInHypothesis">true</param>
 		<param name = "variableAssignmentType">WORDS</param>
-		<param name = "model">/media/qa-srv/D/erel/trained/&traincorpus;__&trainengine;</param>
+		
+		<param name = "model">REASONABLE_GUESS</param>
 		<param name = "model twins">/media/qa-srv/D/erel/trained/twins_filtered_200_20__NoTruthTeller__NoCoreference__WORDNET_CATVAR__R15933</param>
 		<param name = "model RTE3">/media/qa-srv/D/erel/trained/RTE3__NoTruthTeller__NoCoreference__WORDNET_CATVAR__R15399</param>
 		<param name = "model guess">REASONABLE_GUESS</param>
@@ -85,125 +59,13 @@
 		</param>
 	</module>
 
-	<module name="lexical filter">	
-		<param name="class">QuickShallowLexicalEntailer</param>
-		<param name="lexical resources">&plis_knowledge_resources;</param> 
-		<param name="transitivity length">2</param>		<!-- default number of steps when building the graph -->
-		<param name="default sense for seeds">true</param>			<!-- true means use first sense, false means use all senses-->   
-		<param name="stop words">$DATA/word-lists/stopwords-Eyal.txt</param>
-		<param name="relevantPosTags">NOUN,PRONOUN,VERB</param>
-		<param name="preprocessModule">preprocessing</param>
-	</module>
-	
-	<module name="biutee with filter">
-		<param name="class">FilteredTextualEntailer</param>
-		<param name="mainModule">biutee</param>
-		<param name="filterModule">lexical filter</param>
-	</module>
-
 	<module name="biutee paraphrase">
 		<param name="class">ParaphraseTextualEntailer</param>
 		<param name="mainModule">biutee</param>
 	</module>
 
-	<module name="plis">	
-		<param name="class">PlisTextualEntailer</param>
-
-		<param name="lexical resources">&plis_knowledge_resources;</param> 
-		<!-- Additional resources: bapV2, Wikipedia -->
-		<!--  Wikipedia+3 alone makes this much much slower than just the 3; -->
-		<!--  BAP+3 makes this >5 times slower than just the 3; -->
-
-		<param name="probabilistic model file name">$QASRV_DATA/PLIS_Trained_Models/mplm/WN,catvar,Wiki,VerbOcean,Bap-1.model</param>
-		<!-- param name="probabilistic model file name">$QASRV_DATA/PLIS_Trained_Models/2012-10-21.ini</param -->
-
-		<param name="transitivity length">&plis_transitivity;</param> <!-- default number of steps when building the graph -->
-		<param name="default sense for seeds">true</param> <!-- true means use first sense only, false means use all senses-->   
-
-		<param name="model type">nmplm</param>	
-                <!-- base (ACL 2011)|hnplm (TexInfer 2011)|mplm (*SEM 2012)|nmplm (normalized MPLM)|witnesses (ACL 2013?) -->
-
-		<param name="stop words">$QASRV_DATA/RESOURCES/word-lists/stopwords-Eyal.txt</param>
-		<param name="entailmentProbabilityThreshold">0.6</param>
-		<param name="refine labels to relation types">true</param>
-		<!-- false = relation name is always the resource name. true = each resource may have different relation names.  -->
-
-		<param name="preprocessModule">preprocessing</param>
-	</module>
-
-	<module name="plis paraphrase">
-		<param name="class">ParaphraseTextualEntailer</param>
-		<param name="mainModule">plis</param>
-	</module>
-
-	<module name="plis long to short">
-		<param name="class">TextualEntailerLongToShort</param>
-		<param name="mainModule">plis</param>
-	</module>
-	
-	<module name="plis with variables">
-		<param name="class">TextualEntailerWithVariables</param>
-		<param name="mainModule">plis</param>
-		<param name="variableAssignmentType">WORDS</param>
-		<param name="moduleNamesOfVariableTypes">
-nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organizationVariable,locationVariable,numberVariable,anyVariable,lemmaVariable,optionalVariable
-		</param>
-	</module>
-
-	<module name="semantic_map_for_ACE">
-		<param name="wiki_file">$WORKSPACE/biutee_industry/maps/AceIdanSemanticMap.txt</param>
-	</module>
-
-	<module name="ace_translator">
-		<param name="entailServiceModule">biutee with filter</param>
-		<param name="semanticMapModule">semantic_map_for_ACE</param>
-		<param name="entailmentProbabilityThreshold">0.5</param>
-	</module>
 
 
-
-	<module name="semantic_map_for_KBP">
-		<param name="table_contents OLD">
-			# Demo file for translating natural language to semantic representation.
-			# Demonstrates using two variables in the hypothesis.
-			{person}1 was born in {location}2		-> {person}1##per__country_of_birth__gpe##{location}2
-			{person}1 was born in {location}2		-> {person}1##per__stateorprovince_of_birth__gpe##{location}2
-
-			{person}1 is the child of  {person}2  -> {person}1:per:children:{person}2
-			{person}2 is the parent of {person}1  -> per:children
-
-			{person}1 is the brother of {person}2      -> {person}1:per:siblings:{person}2
-			{person}1 is the sister of {person}2       -> {person}1:per:siblings:{person}2
-
-			# Tests: the right-hand side is the expected result:
-			@Test Isaac is Abraham's son     -> Isaac:per:children:Abraham
-			@Test Bart is a brother of Lisa  -> Bart:per:siblings:Lisa
-			@Test Isaac Jr. is Dr. Abraham's son     -> Isaac Jr.:per:children:Dr. Abraham
-		</param>
-		<param name="table_file">$WORKSPACE/KBP/hypothesis_table.txt</param>
-		<param name="table_separator">\s*->\s*</param>
-	</module>
-
-	<module name="biutee_for_KBP">
-		<param name="class">TextualEntailmentTranslator</param>
-		<param name="entailServiceModule">biutee with filter</param>
-		<param name="semanticMapModule">semantic_map_for_KBP</param>
-		<param name="entailmentProbabilityThreshold">0.5</param>
-	</module>
-
-
-
-
-	<module name="twins_corpus">
-		<param name="wiki_file">$WIKICACHE/TwinsSemanticMapFull.txt</param>
-		<param name="testType">ALL_RESULTS</param>
-	</module>
-	<module name="twins_translator">
-		<param name="class">TextualEntailmentTranslator</param>
-		<param name="entailServiceModule">&default_textual_entailer;</param>
-		<param name="semanticMapModule">twins_corpus</param>
-		<param name="entailmentProbabilityThreshold">0.6</param>
-	</module>
 
 	<module name="job_candidate_negotiation_corpus">
 		<param name="wiki_file">$WIKICACHE/JobCandidateNegotiationSemanticMapShortWithVariables.txt</param>
@@ -211,7 +73,7 @@ nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organi
 	</module>
 	<module name="job_candidate_negotiation_translator">
 		<param name="class">TextualEntailmentTranslator</param>
-		<param name="entailServiceModule">&default_textual_entailer;</param> <!--  never use filter here - it's counter-productive -->
+		<param name="entailServiceModule">biutee</param> <!--  never use filter here - it's counter-productive -->
 		<param name="semanticMapModule">job_candidate_negotiation_corpus</param>
 		<param name="entailmentProbabilityThreshold">0.9</param> 
                      <!-- 0.9 is best for BIUTEE with no knowledge -->
@@ -227,7 +89,7 @@ nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organi
 
 
 	<module name = "transformations">
-		<param name = "knowledge_resources">&biutee_knowledge_resources;</param> 
+		<param name = "knowledge_resources">UNARY_LIN,VERB_OCEAN,CATVAR</param> 
 
 				<!--  inactive params: -->
 				<!-- All resources: -->	
@@ -314,8 +176,8 @@ nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organi
 	</module>
 
 	<module name="TruthTeller">
-		<param name = "do_annotations">true</param>
-		<param name = "annotation_rules_file">$DATA/SyntacticRuleBase/serializedAnnotationRulesWithNouns.ser</param>
+		<param name = "do_annotations">false</param>
+		<param name = "annotation_rules_file">$DATA/SyntacticRuleBase/serializedAnnotationRules.ser</param>
 	</module>
 
 	<module name="origdirt">
@@ -649,7 +511,7 @@ nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organi
 
 	<module name="negotiation translation grammar">
 		<!-- for translation: -->
-		<param name="file">maps/NegotiationGrammar.txt</param>
+		<param name="file">maps/NegotiationGrammarSmall.txt</param>
 		<param name="grammarRoot">{any:root}</param>
 
 		<!-- for testing: -->

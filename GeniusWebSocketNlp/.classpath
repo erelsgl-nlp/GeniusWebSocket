@@ -25,8 +25,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/GeniusWebSocket"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GeniusBI"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/socket.io-java-client"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/engineml_vars"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/factories"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/textvariables"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

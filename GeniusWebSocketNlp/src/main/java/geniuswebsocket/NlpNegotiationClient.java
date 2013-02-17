@@ -1,18 +1,16 @@
 package geniuswebsocket;
-import java.util.Arrays;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.*;
 import java.util.logging.Level;
 
-import eu.excitementproject.eop.common.utilities.SimpleLogInitializer;
+import org.json.JSONException;
+
 import eu.excitementproject.eop.common.utilities.StringUtil;
-import eu.excitementproject.eop.common.utilities.configuration.ConfigurationFile;
-import eu.excitementproject.eop.common.utilities.configuration.ConfigurationParams;
-
-import ac.biu.nlp.entailment.impl.biutee.GlobalBiuteeSystemInitialization;
 import ac.biu.nlp.translate.*;
-import ac.biu.nlp.translate.impl.entailment.BiuteeGrammarTranslator;
-
 import geniuswebsocket.NegotiationClient;
 import negotiator.Domain;
+import negotiator.exceptions.NegotiatorException;
 
 /**
  * A socket.io client that negotiates with humans. 
@@ -20,37 +18,60 @@ import negotiator.Domain;
  * @author Erel Segal Halevi
  * @since 2013-02
  */
-public class NlpNegotiationClient extends NegotiationClient {
+public class NlpNegotiationClient {
 	
 	/**
 	 * translates from natural language to semantic representation.
 	 */
-	protected Translator<ScoredTranslation> translator;
+	protected SocketioTranslator<ScoredTranslation> translator;
+	
+	/**
+	 * Handles strategic negotiation.
+	 */
+	protected NegotiationClient negotiator;
 	
 	/**
 	 * @param domainFile full path to the Genius XML file with the domain data. 
 	 * @param serverUrl full URL (http://host:port) of the socket.io game-server that handles the negotiation.
 	 * @param gameType name of the game-class to join - from the games available on the game-server.
 	 * @param translator - translates from natural language to semantic representation.
+	 * @throws MalformedURLException 
 	 */
-	public NlpNegotiationClient(Domain domain, String serverUrl, String gameType, Translator<ScoredTranslation> translator) {
-		super(domain, serverUrl, gameType);
-		this.translator=translator;
+	public NlpNegotiationClient(Domain domain, String negotiationServerUrl, String gameType, String translationServerUrl) throws MalformedURLException {
+		this.negotiator = new NegotiationClient(domain, negotiationServerUrl, gameType) {
+			/**
+			 * This function is called whenever the partner sends a message in natural language.
+			 */
+			@Override public void onNaturalLanguageMessage(String message) {
+				negotiationSocket.emit("message", "Translating '"+message+"'...");
+				translator.sendToTranslationServer(message, /*forward=*/true);
+			}
+		};
+		
+	
+		this.translator=new SocketioTranslator<ScoredTranslation>(translationServerUrl) {
+			/**
+			 * This function is called whenever the translator returns a semantic representation.
+			 */
+			@Override public void onTranslation(List<String> results) {
+				String message="";
+				System.out.println("NlpNegotiationClient received translations: "+StringUtil.join(results, " AND "));
+				negotiator.sayToNegotiationServer("I got "+results.size()+" translations.");
+				if (results.size()==0) {
+					negotiator.sayToNegotiationServer("I didn't understsand your message '"+message+"'. Please say it in other words.");
+					return;
+				}
+
+				String semantics = StringUtil.join(results, " AND ");
+				negotiator.sayToNegotiationServer("I think you meant '"+semantics+"'.");
+			}
+		};
+		
+		//translator.sendToTranslationServer("test", /*forward=*/true);
 	}
 
-	/**
-	 * This function is called whenever the partner sends a message in natural language.
-	 */
-	@Override public void onNaturalLanguageMessage(String message) {
-		ScoredTranslation translations = translator.translate(message, /*forward=*/true);
-		
-		if (translations.size()==0) {
-			socket.emit("message", "I didn't understsand your message '"+message+"'. Please say it in other words.");
-			return;
-		}
-		String semantics = StringUtil.join(Arrays.asList(translations.results()), " AND ");
-		socket.emit("message", "I think you meant '"+semantics+"'.");
-		return;
+	public void start() throws JSONException, IOException, NegotiatorException {
+		negotiator.start();
 	}
 	
 	/*
@@ -60,23 +81,11 @@ public class NlpNegotiationClient extends NegotiationClient {
 	private static String thisClassName = Thread.currentThread().getStackTrace()[1].getClassName();
 	
 	public static void main(String[] args) throws Exception {
-		if (args.length<3) {
-			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-type>");
+		if (args.length<4) {
+			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-type> <url-of-translation-server>");
 			System.exit(1);
 		}
 		java.util.logging.Logger.getLogger("io.socket").setLevel(Level.WARNING);
-		
-		TranslatorFactory.INSTANCE.registerClass("BiuteeGrammarTranslator", BiuteeGrammarTranslator.class);
-		SimpleLogInitializer.init();
-		
-		ConfigurationFile configurationFile = new ConfigurationFile("excitement_translate.xml");
-		configurationFile.setExpandingEnvironmentVariables(true);
-	
-		ConfigurationParams globalBiuteeParams = configurationFile.getModuleConfiguration("biutee");
-		ConfigurationParams grammarTranslatorParams = configurationFile.getModuleConfiguration("biutee grammar translator");
-		GlobalBiuteeSystemInitialization.init(globalBiuteeParams);
-
-		Translator<ScoredTranslation> translator = new BiuteeGrammarTranslator(grammarTranslatorParams);
-		new NlpNegotiationClient(new Domain(args[0]), args[1], args[2], translator).start();  // Start the first client. It will launch new clients as the need arises.
+		new NlpNegotiationClient(new Domain(args[0]), args[1], args[2], args[3]).start();  // Start the first client. It will launch new clients as the need arises.
 	}
 }

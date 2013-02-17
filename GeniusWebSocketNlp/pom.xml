@@ -16,14 +16,14 @@
 
   <dependencies>
   	<dependency>
-  		<groupId>eop.excitementproject</groupId>
-  		<artifactId>excitement_translate</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
   		<groupId>org.json</groupId>
   		<artifactId>org.json</artifactId>
   		<version>chargebee-1.0</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>eop.excitementproject</groupId>
+  		<artifactId>translate</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>
