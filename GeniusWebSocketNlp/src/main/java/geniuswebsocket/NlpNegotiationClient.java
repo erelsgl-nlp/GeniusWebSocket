@@ -18,7 +18,7 @@ import negotiator.exceptions.NegotiatorException;
  * @author Erel Segal Halevi
  * @since 2013-02
  */
-public class NlpNegotiationClient {
+public class NlpNegotiationClient extends NegotiationClient {
 	
 	/**
 	 * translates from natural language to semantic representation.
@@ -26,53 +26,76 @@ public class NlpNegotiationClient {
 	protected SocketioTranslator<ScoredTranslation> translator;
 	
 	/**
-	 * Handles strategic negotiation.
+	 * full URL (http://host:port) of the socket.io server that handles the translations to semantics. 
 	 */
-	protected NegotiationClient negotiator;
+	protected String translationServerUrl;
+	
+	protected boolean debug;
 	
 	/**
 	 * @param domainFile full path to the Genius XML file with the domain data. 
 	 * @param serverUrl full URL (http://host:port) of the socket.io game-server that handles the negotiation.
 	 * @param gameType name of the game-class to join - from the games available on the game-server.
-	 * @param translator - translates from natural language to semantic representation.
+	 * @param translationServerUrl full URL (http://host:port) of the socket.io server that handles the translations to semantics. 
 	 * @throws MalformedURLException 
 	 */
 	public NlpNegotiationClient(Domain domain, String negotiationServerUrl, String gameType, String translationServerUrl) throws MalformedURLException {
-		this.negotiator = new NegotiationClient(domain, negotiationServerUrl, gameType) {
-			/**
-			 * This function is called whenever the partner sends a message in natural language.
-			 */
-			@Override public void onNaturalLanguageMessage(String message) {
-				negotiationSocket.emit("message", "Translating '"+message+"'...");
-				translator.sendToTranslationServer(message, /*forward=*/true);
-			}
-		};
-		
+		super(domain, negotiationServerUrl, gameType);
+		this.translationServerUrl = translationServerUrl;
+		this.translator = newTranslator(translationServerUrl);
+	}
+
 	
-		this.translator=new SocketioTranslator<ScoredTranslation>(translationServerUrl) {
+	/**
+	 * This function is called whenever the partner sends a message in natural language.
+	 */
+	@Override public void onNaturalLanguageMessage(String message) {
+		if (message.startsWith("debug=")) {
+			if ("debug=1".equals(message)) {
+				debug = true;
+			} else if ("debug=0".equals(message)) {
+				debug = false;
+			}
+			return;
+		}
+
+		if (debug) sayToNegotiationServer("Translating '"+message+"'...");
+		translator.sendToTranslationServer(message, /*forward=*/true);
+	}
+	
+
+	/**
+	 * This function is called whenever a new partner joins and starts negotiating with the current client.
+	 */
+	@Override public NegotiationClient clone() {
+		try {
+			return new NlpNegotiationClient(domain, serverUrl, gameType, translationServerUrl);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("Cannot clone",e);
+		}
+	}
+	
+	protected SocketioTranslator<ScoredTranslation> newTranslator(String translationServerUrl) throws MalformedURLException {
+		return new SocketioTranslator<ScoredTranslation>(translationServerUrl) {
+			
 			/**
 			 * This function is called whenever the translator returns a semantic representation.
 			 */
 			@Override public void onTranslation(List<String> results) {
 				String message="";
 				System.out.println("NlpNegotiationClient received translations: "+StringUtil.join(results, " AND "));
-				negotiator.sayToNegotiationServer("I got "+results.size()+" translations.");
+				if (debug) sayToNegotiationServer("I got "+results.size()+" translations.");
 				if (results.size()==0) {
-					negotiator.sayToNegotiationServer("I didn't understsand your message '"+message+"'. Please say it in other words.");
+					sayToNegotiationServer("I didn't understsand your message '"+message+"'. Please say it in other words.");
 					return;
 				}
 
 				String semantics = StringUtil.join(results, " AND ");
-				negotiator.sayToNegotiationServer("I think you meant '"+semantics+"'.");
+				sayToNegotiationServer("I think you meant '"+semantics+"'.");
 			}
 		};
-		
-		//translator.sendToTranslationServer("test", /*forward=*/true);
 	}
 
-	public void start() throws JSONException, IOException, NegotiatorException {
-		negotiator.start();
-	}
 	
 	/*
 	 * Main program:
