@@ -45,13 +45,13 @@ import agents.biu.KBAgent;
  * @since 2013-02
  */
 public class NegotiationClient implements IOCallback, Cloneable {
-	private String roleOfThisAgent, roleOfOtherPlayer;
-	private AgentID agentIdOfThisAgent, agentIdOfOtherPlayer;
+	protected String roleOfThisAgent, roleOfOtherPlayer;
+	protected AgentID agentIdOfThisAgent, agentIdOfOtherPlayer;
 	
 	/**
 	 * socket for connecting to the Node.js negotiation server:
 	 */
-	private SocketIO socket;
+	protected SocketIO socket;
 	
 	/**
 	 * agent for strategic negotiation
@@ -61,17 +61,17 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	/**
 	 * Genius negotiation domain 
 	 */
-	private Domain domain;
+	protected Domain domain;
 	
 	/**
 	 * full URL (http://host:port) of the socket.io server that handles the negotiation. 
 	 */
-	private String serverUrl;
+	protected String serverUrl;
 	
 	/**
 	 * name of the game-class to join - from the games available on the game-server
 	 */
-	private String gameType;
+	protected String gameType;
 
 
 	/**

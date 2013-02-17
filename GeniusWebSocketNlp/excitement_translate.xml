@@ -1,0 +1,665 @@
+<!DOCTYPE page [
+<!ENTITY traincorpus "REASONABLE_GUESS">
+<!ENTITY traincorpus1 "RTE3">
+<!ENTITY traincorpus3 "jobcandidate_balanced_all_7">
+<!ENTITY traincorpus2 "twins_filtered5_balanced_all_7">
+
+<!ENTITY trainengine2 "NoTruthTeller__NoCoreference__WORDNET,CATVAR,WIKIPEDIA,BAP,VERB_OCEAN,UNARY_BINC__R16024">
+<!ENTITY trainengine1 "NoTruthTeller__NoCoreference__NoKnowledge__R16024">
+<!ENTITY trainengine "NoTruthTeller__NoCoreference__WORDNET,CATVAR__R16024">
+
+<!ENTITY biutee_knowledge_resources "UNARY_LIN,VERB_OCEAN,CATVAR">
+<!ENTITY plis_knowledge_resources "">
+<!ENTITY plis_transitivity "2">
+
+<!ENTITY biutee_knowledge_resources0 "">
+<!ENTITY plis_knowledge_resources0 "">
+
+<!ENTITY biutee_knowledge_resources2 "WORDNET,CATVAR,VERB_OCEAN">
+<!ENTITY plis_knowledge_resources2 "catvarV2,WNV2,VerbOceanV2">
+
+<!ENTITY default_textual_entailer "biutee">
+<!ENTITY default_textual_entailer1 "plis with variables">
+
+
+]>
+
+<configuration>
+	<module name="experiment">
+		<param name="traincorpus">&traincorpus;</param>
+		<param name="trainengine">&trainengine;</param>
+	</module>
+	<module name = "preprocessing for biutee">
+		<param name = "class">PreprocessClient</param>
+		<param name = "preprocess_host">nlp-srv</param>
+		<param name = "preprocess_port">8082</param>
+
+		<param name = "class OLD">BiuteePreprocessor</param>
+		<param name = "coreferencer">NONE</param>
+		<param name = "do_named_entity_recognition">true</param>
+		<param name = "stanford_ner_classifier_path">$JARS/stanford-ner-2009-01-16/classifiers/ner-eng-ie.crf-3-all2008-distsim.ser.gz</param>
+		<param name = "do_text_normalization">true</param>
+		<param name = "new_normalizer">$JARS/BiuNormalizer/string_rules.txt</param>
+		<param name = "parserModule">parser</param>
+	</module>
+	<module name = "parser">
+		<param name = "class">EASYFIRST</param>
+		<param name = "easyfirst_host">te-srv1</param>
+		<param name = "easyfirst_port">8081</param>
+		<param name = "pos_tagger_module">pos_tagger</param>
+		<param name = "parse_dependency_paths">true</param>
+	</module>
+	<module name = "pos_tagger">
+		<param name = "class">OPENNLP</param>
+		<param name = "opennlp-pos-tagger-model-file-path">$JARS/opennlp-tools-1.3.0/models/english/parser/tag.bin.gz</param>
+		<param name = "opennlp-pos-tag-dictionary-file-path">$JARS/opennlp-tools-1.3.0/models/english/parser/tagdict</param>
+		<param name = "easyfirst_stanford_pos_tagger OLD">$JARS/stanford-postagger-full-2008-09-28/models/bidirectional-wsj-0-18.tagger</param>
+	</module>
+
+	<module name = "preprocessing"> <!--  for the lexical resource integrator LexicalSentenceProcessor -->
+		<param name = "do_named_entity_recognition">false</param>
+		<param name = "do_text_normalization">true</param>
+		<param name = "new_normalizer">$JARS/BiuNormalizer/string_rules.txt</param>
+		<param name = "lemmatizer_rule_file">$JARS/GATE-3.1/plugins/Tools/resources/morph/default.rul</param>
+		<param name = "opennlp-pos-tagger-model-file-path">$JARS/opennlp-tools-1.3.0/models/english/parser/tag.bin.gz</param>
+		<param name = "opennlp-pos-tag-dictionary-file-path">$JARS/opennlp-tools-1.3.0/models/english/parser/tagdict</param>
+		<param name = "stop words">$DATA/word-lists/stopwords-Eyal.txt</param>
+	</module>
+
+	<!-- configuration for BIUTEE SystemInitialization -->
+	<module name = "biutee">
+		<param name = "class">BiuteeTextualEntailer</param>
+		<param name = "parser">EASYFIRST</param>
+		<param name = "lemmatizer_rule_file">$JARS/GATE-3.1/plugins/Tools/resources/morph/default.rul</param>
+		<param name = "unigram_lidston_ser_file">$DATA/UnigramProbabilities/Reuters-PPD_unigram.ser</param>
+		<param name = "preprocessModule">preprocessing for biutee</param>
+		<param name = "allowVariablesInHypothesis">true</param>
+		<param name = "variableAssignmentType">WORDS</param>
+		<param name = "model">/media/qa-srv/D/erel/trained/&traincorpus;__&trainengine;</param>
+		<param name = "model twins">/media/qa-srv/D/erel/trained/twins_filtered_200_20__NoTruthTeller__NoCoreference__WORDNET_CATVAR__R15933</param>
+		<param name = "model RTE3">/media/qa-srv/D/erel/trained/RTE3__NoTruthTeller__NoCoreference__WORDNET_CATVAR__R15399</param>
+		<param name = "model guess">REASONABLE_GUESS</param>
+		<param name = "model RTE6">$QASRV_DATA/BIUTEE_Trained_Models/RTE6/RTE6__MAIN_TASK__TOP_20__NO_TRUTHTELLER__WORDNET_CATVAR</param>
+
+		<param name = "moduleNamesOfVariableTypes">nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organizationVariable,locationVariable,numberVariable,anyVariable,lemmaVariable,optionalVariable
+		</param>
+	</module>
+
+	<module name="lexical filter">	
+		<param name="class">QuickShallowLexicalEntailer</param>
+		<param name="lexical resources">&plis_knowledge_resources;</param> 
+		<param name="transitivity length">2</param>		<!-- default number of steps when building the graph -->
+		<param name="default sense for seeds">true</param>			<!-- true means use first sense, false means use all senses-->   
+		<param name="stop words">$DATA/word-lists/stopwords-Eyal.txt</param>
+		<param name="relevantPosTags">NOUN,PRONOUN,VERB</param>
+		<param name="preprocessModule">preprocessing</param>
+	</module>
+	
+	<module name="biutee with filter">
+		<param name="class">FilteredTextualEntailer</param>
+		<param name="mainModule">biutee</param>
+		<param name="filterModule">lexical filter</param>
+	</module>
+
+	<module name="biutee paraphrase">
+		<param name="class">ParaphraseTextualEntailer</param>
+		<param name="mainModule">biutee</param>
+	</module>
+
+	<module name="plis">	
+		<param name="class">PlisTextualEntailer</param>
+
+		<param name="lexical resources">&plis_knowledge_resources;</param> 
+		<!-- Additional resources: bapV2, Wikipedia -->
+		<!--  Wikipedia+3 alone makes this much much slower than just the 3; -->
+		<!--  BAP+3 makes this >5 times slower than just the 3; -->
+
+		<param name="probabilistic model file name">$QASRV_DATA/PLIS_Trained_Models/mplm/WN,catvar,Wiki,VerbOcean,Bap-1.model</param>
+		<!-- param name="probabilistic model file name">$QASRV_DATA/PLIS_Trained_Models/2012-10-21.ini</param -->
+
+		<param name="transitivity length">&plis_transitivity;</param> <!-- default number of steps when building the graph -->
+		<param name="default sense for seeds">true</param> <!-- true means use first sense only, false means use all senses-->   
+
+		<param name="model type">nmplm</param>	
+                <!-- base (ACL 2011)|hnplm (TexInfer 2011)|mplm (*SEM 2012)|nmplm (normalized MPLM)|witnesses (ACL 2013?) -->
+
+		<param name="stop words">$QASRV_DATA/RESOURCES/word-lists/stopwords-Eyal.txt</param>
+		<param name="entailmentProbabilityThreshold">0.6</param>
+		<param name="refine labels to relation types">true</param>
+		<!-- false = relation name is always the resource name. true = each resource may have different relation names.  -->
+
+		<param name="preprocessModule">preprocessing</param>
+	</module>
+
+	<module name="plis paraphrase">
+		<param name="class">ParaphraseTextualEntailer</param>
+		<param name="mainModule">plis</param>
+	</module>
+
+	<module name="plis long to short">
+		<param name="class">TextualEntailerLongToShort</param>
+		<param name="mainModule">plis</param>
+	</module>
+	
+	<module name="plis with variables">
+		<param name="class">TextualEntailerWithVariables</param>
+		<param name="mainModule">plis</param>
+		<param name="variableAssignmentType">WORDS</param>
+		<param name="moduleNamesOfVariableTypes">
+nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organizationVariable,locationVariable,numberVariable,anyVariable,lemmaVariable,optionalVariable
+		</param>
+	</module>
+
+	<module name="semantic_map_for_ACE">
+		<param name="wiki_file">$WORKSPACE/biutee_industry/maps/AceIdanSemanticMap.txt</param>
+	</module>
+
+	<module name="ace_translator">
+		<param name="entailServiceModule">biutee with filter</param>
+		<param name="semanticMapModule">semantic_map_for_ACE</param>
+		<param name="entailmentProbabilityThreshold">0.5</param>
+	</module>
+
+
+
+	<module name="semantic_map_for_KBP">
+		<param name="table_contents OLD">
+			# Demo file for translating natural language to semantic representation.
+			# Demonstrates using two variables in the hypothesis.
+			{person}1 was born in {location}2		-> {person}1##per__country_of_birth__gpe##{location}2
+			{person}1 was born in {location}2		-> {person}1##per__stateorprovince_of_birth__gpe##{location}2
+
+			{person}1 is the child of  {person}2  -> {person}1:per:children:{person}2
+			{person}2 is the parent of {person}1  -> per:children
+
+			{person}1 is the brother of {person}2      -> {person}1:per:siblings:{person}2
+			{person}1 is the sister of {person}2       -> {person}1:per:siblings:{person}2
+
+			# Tests: the right-hand side is the expected result:
+			@Test Isaac is Abraham's son     -> Isaac:per:children:Abraham
+			@Test Bart is a brother of Lisa  -> Bart:per:siblings:Lisa
+			@Test Isaac Jr. is Dr. Abraham's son     -> Isaac Jr.:per:children:Dr. Abraham
+		</param>
+		<param name="table_file">$WORKSPACE/KBP/hypothesis_table.txt</param>
+		<param name="table_separator">\s*->\s*</param>
+	</module>
+
+	<module name="biutee_for_KBP">
+		<param name="class">TextualEntailmentTranslator</param>
+		<param name="entailServiceModule">biutee with filter</param>
+		<param name="semanticMapModule">semantic_map_for_KBP</param>
+		<param name="entailmentProbabilityThreshold">0.5</param>
+	</module>
+
+
+
+
+	<module name="twins_corpus">
+		<param name="wiki_file">$WIKICACHE/TwinsSemanticMapFull.txt</param>
+		<param name="testType">ALL_RESULTS</param>
+	</module>
+	<module name="twins_translator">
+		<param name="class">TextualEntailmentTranslator</param>
+		<param name="entailServiceModule">&default_textual_entailer;</param>
+		<param name="semanticMapModule">twins_corpus</param>
+		<param name="entailmentProbabilityThreshold">0.6</param>
+	</module>
+
+	<module name="job_candidate_negotiation_corpus">
+		<param name="wiki_file">$WIKICACHE/JobCandidateNegotiationSemanticMapShortWithVariables.txt</param>
+		<param name="testType">ALL_RESULTS</param>
+	</module>
+	<module name="job_candidate_negotiation_translator">
+		<param name="class">TextualEntailmentTranslator</param>
+		<param name="entailServiceModule">&default_textual_entailer;</param> <!--  never use filter here - it's counter-productive -->
+		<param name="semanticMapModule">job_candidate_negotiation_corpus</param>
+		<param name="entailmentProbabilityThreshold">0.9</param> 
+                     <!-- 0.9 is best for BIUTEE with no knowledge -->
+                     <!-- set to 0 for testAllResultsAccuracy -->
+	</module>
+
+	<module name="job_candidate_negotiation_classifier">
+		<param name="class">LingpipeClassifierTranslator</param>
+		<param name="semanticMapModule">job_candidate_negotiation_corpus</param>
+		<param name="ngramSize">6</param>
+	</module>
+
+
+
+	<module name = "transformations">
+		<param name = "knowledge_resources">&biutee_knowledge_resources;</param> 
+
+				<!--  inactive params: -->
+				<!-- All resources: -->	
+						<param name = "knowledge_resources all">WORDNET,WIKIPEDIA,BAP,LIN_SIMILARITY,VERB_OCEAN,ORIG_DIRT,UNARY_BINC</param>-->
+
+				<!-- No resources: -->	
+				  		<param name = "knowledge_resources 0"></param>
+				
+				
+				<!-- Best in RTE7: -->	
+				<!-- 		<param name = "knowledge_resources">WORDNET,WIKIPEDIA,BAP,SYNTACTIC</param> -->
+				
+				<!-- Best in ACE: -->	
+				<!--	<param name = "knowledge_resources">WIKIPEDIA,BAP,SYNTACTIC,WORDNET,UNARY_BINC</param> -->
+
+ 		<param name = "multiword_resources"></param>
+
+		<param name = "stop_words">$DATA/word-lists/stopwords-Eyal.txt</param>
+
+		<param name="plugin_registerer">ac.biu.nlp.nlp.plugins.AllPluginRegisterer</param>
+		<param name="plugins_to_apply">
+			Foo-Bar Plugin,MOVE_TO_ROOT_PLUGIN,MOVE_PREPOSITION_PHRASE_PLUGIN,MOVE_TO_OPTIONAL_NODE_PLUGIN,MOVE_CHANGE_RELATION_WEAK_PLUGIN,MOVE_CHANGE_RELATION_STRONG_PLUGIN,EDIT_DISTANCE_PLUGIN,CHANGE_FROM_UNKNOWN_PREDICATE_TRUTH_PLUGIN,CHANGE_TO_UNKNOWN_PREDICATE_TRUTH_PLUGIN
+		</param>
+	</module>
+
+
+	<module name="simpleLexicalChain">
+		<param name="knowledge_resources">WORDNET,BAP</param>
+		<param name="depth">2</param>
+	</module>
+
+	<module name="WNV2">
+		<param name="resource-class">ac.biu.nlp.inference.lexical.integration.sensed_lexical_resource.SensedWordNet</param> <!-- required for lexical resource integration -->
+		<param name="wordnet-dir">$DATA/WordNet/3.0/dict.wn.orig</param>
+		<param name="useFirstSenseOnlyLeft">false</param>
+		<param name="useFirstSenseOnlyRight">false</param>
+		<param name="entailing-relations">SYNONYM,DERIVATIONALLY_RELATED,HYPERNYM,INSTANCE_HYPERNYM,MEMBER_HOLONYM,SUBSTANCE_MERONYM</param>
+		<!-- PART_HOLONYM is bad! year entails month! -->
+		<param name="wordnet-depth">2</param>
+	</module>
+	
+	<module name="catvarV2">
+		<param name="resource-class">ac.biu.nlp.inference.lexical.integration.sensed_lexical_resource.SensedCatvar</param>
+		<param name="class">CATVAR</param>
+		<param name="catver-file-name">$DATA/CatVar/catvar21</param>
+	</module>
+
+	<module name = "WikiV2">
+		<param name="resource-class">ac.biu.nlp.inference.lexical.integration.sensed_lexical_resource.SensedWikipedia</param>
+		<param name="class">WIKIPEDIA</param>
+		<param name = "stop words">$DATA/word-lists/stopwords-Eyal.txt</param>
+		<param name = "extraction types to keep">Redirect,BeComp,BeCompIndirect,Parenthesis,Link,AllNounsTop</param>
+		<param name = "wikiKB DB url">jdbc:mysql://qa-srv:3308/wikikb?user=db_readonly</param>
+		<param name = "cooccurrence threshold">0.0001</param>
+	</module>
+
+	<module name="bapV2">
+		<param name="resource-class">ac.biu.nlp.inference.lexical.integration.sensed_lexical_resource.SensedDirect200LexicalResource</param>
+		<param name="class">DIRECT200<!--  similar: DIRECT1000 --></param>
+		<param name="database_url">jdbc:mysql://$MYSQL/bap?user=db_readonly</param>
+		<param name="limit on retrieved rules">20</param>
+	</module>
+
+	<!-- Specific knowledge resources -->
+	<!-- not for chaining -->
+
+	<module name="logging">
+		<param name="main-output-dir">.</param>
+		<param name="experiment-name">testing lexical chains</param>
+		<param name="logger-level">debug</param>
+		<param name="console-logger-level">debug</param>
+		<param name="log-layout">%p [%d{HH:mm:ss}]	%m%n</param>
+		<param name="write-log-file">true</param>
+		<param name="run-mode">dev</param>	<!-- dev/debug/production -->
+		<param name="allow-relative-paths">true</param>
+		<param name="__mailer-module">mailer</param>
+		<param name="__folders-to-create"></param>
+		<param name="__files-to-copy">,,</param>
+		<param name="log-file-max-size">500MB</param>
+	</module>
+	
+	<module name="Syntactic">
+		<param name = "syntactic_rules_file">$DATA/SyntacticRuleBase/serializedRules.ser</param>
+	</module>
+
+	<module name="TruthTeller">
+		<param name = "do_annotations">true</param>
+		<param name = "annotation_rules_file">$DATA/SyntacticRuleBase/serializedAnnotationRulesWithNouns.ser</param>
+	</module>
+
+	<module name="origdirt">
+		<param name = "database_driver">com.mysql.jdbc.Driver</param>
+		<param name = "database_url">jdbc:mysql://$MYSQL/original_dirt?user=db_readonly</param>
+		<param name = "templates_table">original_dirt.od_easyfirst_templates</param>
+		<param name = "______templates_table">original_dirt.od_templates</param>
+		<param name = "rules_table">original_dirt.od_rules</param>
+		<param name = "limit_number_of_rules">20</param>
+		<!--  
+			SELECT LHS.description, RHS.description 
+			FROM original_dirt.od_easyfirst_templates LHS 
+			JOIN original_dirt.od_rules ON(LHS.id=left_element_id) 
+			JOIN original_dirt.od_easyfirst_templates RHS ON(RHS.id=right_element_id) 
+			WHERE LHS.description like '%v:arrest:v%' AND RHS.description like '%v:capture:v%'; ; 
+		-->
+	</module>
+
+
+
+	<module name="framenet">
+		<param name = "database_driver">com.mysql.jdbc.Driver</param>
+		<param name = "database_url">jdbc:mysql://$MYSQL/framenet?user=db_readonly</param>
+		<param name = "templates_table">framenet_easyfirst_element_table</param>
+		<param name = "rules_table">framenet_rule_table_server_rules8</param>
+		<param name = "limit_number_of_rules">20</param>
+	</module>
+	
+	<module name="unaryBinc">
+		<param name = "database_driver">com.mysql.jdbc.Driver</param>
+		<param name = "database_url">jdbc:mysql://$MYSQL/distsim?user=db_readonly</param>
+
+		<!-- ncd_all use Binc similarity -->
+		<param name = "templates_table">unary_easyfirst_templates_ncd_all</param>
+		<param name = "rules_table">unary_rules_ncd_all</param> 
+
+		<!-- nc_all use Lin similarity. 
+		<param name = "templates_table">unary_easyfirst_templates_nc_all</param>
+		<param name = "rules_table">unary_rules_nc_all</param>  -->
+
+		<!-- K=20 is the best, according to Idan's COLING-2008 paper -->
+		<param name = "limit_number_of_rules">20</param>  
+		<param name = "limit_number_of_rules_per_hypothesis">true</param>
+		<!--  
+SELECT CONCAT(LEFT(description,1),RIGHT(description,1)) AS type, description FROM distsim.unary_easyfirst_templates_ncd_all
+GROUP BY 1;
+
+SELECT LHS.description, RHS.description, unary_rules_ncd_all.score
+FROM distsim.unary_easyfirst_templates_ncd_all LHS 
+JOIN distsim.unary_rules_ncd_all ON(LHS.id=left_element_id) 
+JOIN distsim.unary_easyfirst_templates_ncd_all RHS ON(RHS.id=right_element_id) 
+WHERE LHS.description like '%v:arrest:v%' AND RHS.description like '%v:capture:v%'
+ORDER BY LHS.description, score DESC; 
+		-->
+	</module>
+
+
+	<!-- A module for dialog-specific lexical-syntactic rules -->
+	<!-- it disguises as unary_lin because there is currently no way to add custom rule-bases -->
+	<module name="unary_lin"> 
+		<param name = "database_driver">com.mysql.jdbc.Driver</param>
+		<param name = "database_url">jdbc:mysql://localhost/erel?user=erel&amp;password=erel</param>
+		<param name = "templates_table">dialog_dependency_paths</param>
+		<param name = "rules_table">dialog_entailment_rules</param>
+		<param name = "limit_number_of_rules">100</param>
+	</module>
+
+
+	
+	<module name="binarydirt">
+		<param name = "database_driver">com.mysql.jdbc.Driver</param>
+		<param name = "database_url">jdbc:mysql://$MYSQL/distsim?user=db_readonly</param>
+		<param name = "templates_table">binaryd_templates_nncn</param>
+		<param name = "rules_table">binaryd_rules_nncn</param>
+		<param name = "limit_number_of_rules">20</param>
+	</module>
+
+
+	<module name="LinDependencySimilarity">
+		<param name = "database_driver">com.mysql.jdbc.Driver</param>
+		<param name = "database_url">jdbc:mysql://$MYSQL/lin?user=db_readonly</param>
+		<param name = "limit_number_of_rules">30</param>
+	</module>
+
+	<!-- chaining -->
+	<module name = "LinDependencySimilarityKB">
+		<param name ="resource-class">org.BIU.NLP.LR.resources.lin.LinDependencySimilarityKB</param>
+	    <param name="jdbc-driver">com.mysql.jdbc.Driver</param>
+	    <param name="db-connection-string">jdbc:mysql://$MYSQL/Lin?user=db_readonly</param>               
+	    <param name="select-limit">20</param>
+	    <param name="lemmatizer-module">Gate-lemmatizer</param>
+	</module>
+	
+	<!-- chaining -->
+	<module name="Fred">
+		<param name="resource-class">org.BIU.NLP.LR.resources.FRED.FredKB</param>
+		<param name="jdbc-driver">com.mysql.jdbc.Driver</param>
+		<param name="db-connection-string">jdbc:mysql://$MYSQL/framenet?user=db_readonly</param>
+		<param name="lemmatizer-module">Gate-lemmatizer</param>
+	</module>
+
+
+
+	<module name="lexDIRT">
+		<param name="resource-class">org.BIU.NLP.LR.resources.lexicalSyntactic.TEWrapperKB</param>
+		<param name="lemmatizer-module">Gate-lemmatizer</param>
+		<param name="template-expander-class">org.BIU.NLP.DIRT.TemplateExpander</param>
+		<param name="dist-sim-utils-class">org.BIU.NLP.DIRT.binary.BinaryDIRTUtils</param>
+		<!-- DistSim backend params -->
+		<param name="verbose-level">0</param>
+		<param name="on-the-fly-class">org.BIU.NLP.DIRT.binary.BinaryDIRTOnTheFly</param>
+		<param name="jdbc-driver">com.mysql.jdbc.Driver</param>
+		<param name="use-only-rule-table">true</param>
+		<param name="db-schama-name">distsim</param>
+		<param name="db-connection-string">jdbc:mysql://$MYSQL/distsim?user=db_readonly</param>
+		<param name="element-table-name">binaryd_templates_nncn</param>
+		<param name="rule-table-name">binaryd_rules_nncn</param>
+		<param name="ignore-rule-score">false</param>
+		<param name="use-cache">false</param>
+		<param name="use-common-features-on-the-fly">false</param>
+		<param name="use-common-global-context-features">false</param>
+		<param name="score-method">WEIGHT</param>
+	</module>
+	
+	<module name="BapDep">
+		<param name="resource-class">org.BIU.NLP.LR.resources.inclusion.BapDep</param>
+
+		<param name="jdbc-driver">com.mysql.jdbc.Driver</param>
+		<param name="db-connection-string">jdbc:mysql://$MYSQL/bap?user=db_readonly</param>
+		<param name="tableName-prefix">bap_reuters_</param>
+		<param name="__tableName-suffix">_all</param>
+		<param name="tableName-suffix">_lintop1000</param>
+		<param name="select-limit">10000</param>
+		<param name="confidence-threshold-nouns">0.0</param>
+		<param name="confidence-threshold-verbs">0.0</param>
+		 <!--   confidence-top-min - how many rules to return, even if none of them 
+				is above the confidence_threshold         -->
+		<param name="confidence-top-min">0</param>
+
+		<param name="lemmatizer-module">Gate-lemmatizer</param>
+	</module>
+
+	<!-- for both chaining and non-chaining -->
+	<module name = "VerbOceanV2">
+		<param name="resource-class">ac.biu.nlp.inference.lexical.integration.sensed_lexical_resource.SensedVerbOcean</param>
+		<param name="class">VERBOCEAN</param>
+		<param name = "threshold">1</param>
+		<param name = "file">$DATA/VerbOcean/verbocean.unrefined.2004-05-20.txt</param> 
+		<param name = "allowedRelations">SIMILAR,STRONGER_THAN</param>
+	</module>
+
+	<module name="GeoKB">
+		<param name="jdbc-driver">com.mysql.jdbc.Driver</param>
+		<param name="lemmatizer-module">Gate-lemmatizer</param>
+		<param name="resource-class">org.BIU.NLP.LR.resources.geo.GeoLexicalResource</param>
+		<param name="db-connection-string">jdbc:mysql://$MYSQL/geo?user=db_readonly</param>
+		<param name="geo-rules-table-name">geo.tipster</param>
+	</module>
+
+	<module name="Gate-lemmatizer">
+		<param name="__lemmatizer-class">org.BURST.NLP.impl.Gatelemmatizer</param>
+		<param name="lemmatizer-rule-file">$JARS/GATE-3.1/plugins/Tools/resources/morph/default.rul</param>
+	</module>
+
+
+	<!--  For GUI -->
+	<module name = "rte_pairs_preprocess">
+		<!-- param name = "parser">EASYFIRST</param -->
+		<param name = "easyfirst_stanford_pos_tagger">$JARS/stanford-postagger-full-2008-09-28/models/bidirectional-wsj-0-18.tagger</param>
+		<param name = "easyfirst_host">localhost</param>
+		<param name = "easyfirst_port">8081</param>
+
+		<param name = "parse_dependency_paths">true</param>
+
+		<param name = "stanford_ner_classifier_path">$JARS/stanford-ner-2009-01-16/classifiers/ner-eng-ie.crf-3-all2008-distsim.ser.gz</param>
+		<param name = "new_normalizer">$JARS/BiuNormalizer/string_rules.txt</param>
+		<param name = "coreferencer">NONE</param>
+
+		<param name = "do_named_entity_recognition">true</param>
+		<param name = "do_text_normalization">true</param>
+
+		<!-- for RTEPairsPreProcessor : -->
+		<param name="dataset">/media/qa-srv/D/erel/pairs/trainpairs.xml</param>
+		<param name="dataset RTE3">/media/qa-srv/D/Data/Datasets/RTE/3/Dev/dev.xml</param>
+		<param name="annotated">true</param>
+		<param name="serialization_filename">/media/qa-srv/D/erel/preprocessed/trainpairs.ser</param>
+	</module>
+
+
+	<!-- for RTEPairsMultiThreadTrainer : -->
+	<module name="rte_pairs_train_and_test">
+		<param name="serialization_filename">/media/qa-srv/D/erel/preprocessed/trainpairs.ser</param>
+		<param name="serialization_filename default">/media/qa-srv/D/erel/preprocessed/trainpairs.ser</param>
+		<param name="serialization_filename RTE3">/media/qa-srv/D/erel/preprocessed/rte3-dev-with-arkref.ser</param>
+		<param name="parser">EASYFIRST</param>
+		<param name="lemmatizer_rule_file">$JARS/GATE-3.1/plugins/Tools/resources/morph/default.rul</param>
+		<param name="threads">4</param>
+		<param name="unigram_lidston_ser_file">$DATA/UnigramProbabilities/Reuters-PPD_unigram.ser</param>
+
+		<param name="serialized_samples">labeled_samples2.ser</param>
+		<param name="search_classifier_samples">labeled_samples1.ser</param>
+	</module>
+
+
+
+	<!-- Modules related to hypothesis variable types -->
+	<!-- NOTE: TO use one or more of these modules, you should reference them from within your main Textual Entailment module. -->	
+	<module name="nounVariable">
+		<param name="assignment-class">CANONICAL_POS</param>
+		<param name="parts-of-speech">NOUN,PRONOUN</param>
+
+		<!--  {noun} -->
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">noun</param>
+		<param name="description-examples">abligurition,brontide,concilliabule</param>
+	</module>
+	<module name="verbVariable">
+		<param name="assignment-class">CANONICAL_POS</param>
+		<param name="parts-of-speech">VERB</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">verb</param>
+		<param name="description-examples">abacinate,bombilate,cancatervate</param>
+	</module>
+	<module name="adjectiveVariable">
+		<param name="assignment-class">CANONICAL_POS</param>
+		<param name="parts-of-speech">ADJECTIVE</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">adjective</param>
+		<param name="description-examples">abbatial,bathyorographical,capernoited</param>
+	</module>
+	<module name="adverbVariable">
+		<param name="assignment-class">CANONICAL_POS</param>
+		<param name="parts-of-speech">ADVERB</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">adverb</param>
+		<param name="description-examples">abderianly,brevirostrately,capernoitedly</param>
+	</module>
+	<module name="personVariable">
+		<param name="assignment-class">NAMED_ENTITY</param>
+		<param name="named-entity-type">PERSON</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">person</param>
+		<param name="description-examples">Ahitoov,Batsheva,Chaya</param>
+	</module>
+	<module name="organizationVariable">
+		<param name="assignment-class">NAMED_ENTITY</param>
+		<param name="named-entity-type">ORGANIZATION</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">organization</param>
+		<param name="description-examples">ABC,BBC,CBS</param>
+	</module>
+	<module name="locationVariable">
+		<param name="assignment-class">NAMED_ENTITY</param>
+		<param name="named-entity-type">LOCATION</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">location</param>
+		<param name="description-examples">Adora,Beitar,Hebron</param>
+	</module>
+
+	<!-- module name="numberVariableForFutureWork">
+		<param name="assignment-class">NUMBER</param>
+		<param name="description-class">CLOSED_DOMAIN</param>
+		<param name="description-string">number</param>
+		<param name="description-examples">90001,90002,90003</param>
+	</module -->
+
+	<module name="numberVariable">
+		<param name="assignment-class">WORD_PATTERN</param>
+		<param name="pattern">\d+</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">number</param>
+		<param name="description-examples">90001,90002,90003</param>
+	</module>
+	<module name="anyVariable">
+		<param name="assignment-class">MATCH_ANYTHING</param>
+
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">any</param>
+		<param name="description-examples"></param> <!--  no examples - cannot parse from string - put directly in parse-tree -->
+	</module>
+	<module name="lemmaVariable">
+		<param name="assignment-class">LEMMA_ENTAILMENT</param>
+
+		<!--  {lemma:river} -->
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">lemma</param>  
+	</module>
+	<module name="optionalVariable">
+		<param name="assignment-class">LEMMA_ENTAILMENT</param>
+
+		<!--  {optional:give} -->
+		<param name="description-class">OPEN_DOMAIN</param>
+		<param name="description-string">optional</param>
+	</module>
+
+
+<!-- grammar modules -->
+
+	<!-- configuration for BIUTEE SystemInitialization and grammar -->
+	<module name = "biutee grammar translator">
+		<param name = "class">BiuteeGrammarTranslator</param>
+
+		<param name = "preprocessModule">preprocessing for biutee</param>
+		<param name = "model">REASONABLE_GUESS</param>
+
+		<param name="moduleNamesOfVariableTypes">
+nounVariable,verbVariable,adjectiveVariable,adverbVariable,personVariable,organizationVariable,locationVariable,numberVariable,anyVariable,lemmaVariable,optionalVariable
+		</param>
+		<param name = "variableAssignmentType">WORDS</param>
+
+		<param name="grammarModule">negotiation translation grammar</param>
+	</module>
+
+	<module name="biutee grammar flat translator">
+		<param name="class">TextualEntailmentTranslator</param>
+		<param name="entailServiceModule">biutee</param>
+
+		<!-- param name="semanticMapModule">job_candidate_negotiation_corpus</param -->
+		<param name="grammarModule">negotiation translation grammar</param>
+		<param name="entailmentProbabilityThreshold">0</param> 
+                     <!-- 0.9 is best for BIUTEE with no knowledge -->
+                     <!-- set to 0 for testAllResultsAccuracy -->
+	</module>
+
+	<module name="negotiation translation grammar">
+		<!-- for translation: -->
+		<param name="file">maps/NegotiationGrammar.txt</param>
+		<param name="grammarRoot">{any:root}</param>
+
+		<!-- for testing: -->
+		<param name="wiki_file">maps/NegotiationGrammar.txt</param>
+		<param name="headings_are_keys">true</param>  
+		<param name="testType">ALL_RESULTS</param>
+
+		<!-- for both: -->
+		<param name="table_separator">\s*[/]\s*</param>
+	</module>
+
+</configuration>
+
