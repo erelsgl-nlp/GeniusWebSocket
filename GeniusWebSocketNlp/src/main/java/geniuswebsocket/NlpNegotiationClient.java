@@ -1,16 +1,12 @@
 package geniuswebsocket;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
 import java.util.logging.Level;
-
-import org.json.JSONException;
 
 import eu.excitementproject.eop.common.utilities.StringUtil;
 import ac.biu.nlp.translate.*;
 import geniuswebsocket.NegotiationClient;
 import negotiator.Domain;
-import negotiator.exceptions.NegotiatorException;
 
 /**
  * A socket.io client that negotiates with humans. 
@@ -30,6 +26,11 @@ public class NlpNegotiationClient extends NegotiationClient {
 	 */
 	protected String translationServerUrl;
 	
+	/**
+	 * Name of the grammar file (relative to the maps folder on the translation server)  
+	 */
+	protected String targetsFileName;
+	
 	protected boolean debug;
 	
 	/**
@@ -39,10 +40,11 @@ public class NlpNegotiationClient extends NegotiationClient {
 	 * @param translationServerUrl full URL (http://host:port) of the socket.io server that handles the translations to semantics. 
 	 * @throws MalformedURLException 
 	 */
-	public NlpNegotiationClient(Domain domain, String negotiationServerUrl, String gameType, String translationServerUrl) throws MalformedURLException {
+	public NlpNegotiationClient(Domain domain, String negotiationServerUrl, String gameType, String translationServerUrl, String targetsFileName) throws MalformedURLException {
 		super(domain, negotiationServerUrl, gameType);
 		this.translationServerUrl = translationServerUrl;
 		this.translator = newTranslator(translationServerUrl);
+		this.targetsFileName = targetsFileName;
 	}
 
 	
@@ -51,16 +53,16 @@ public class NlpNegotiationClient extends NegotiationClient {
 	 */
 	@Override public void onNaturalLanguageMessage(String message) {
 		if (message.startsWith("debug=")) {
-			if ("debug=1".equals(message)) {
-				debug = true;
-			} else if ("debug=0".equals(message)) {
-				debug = false;
-			}
-			return;
+			debug = (message.replace("debug=","").equals("1"));
+			sayToNegotiationServer("Setting debug to '"+debug+"'");
+		}
+		if (message.startsWith("grammar=")) {
+			targetsFileName = message.replace("grammar=","");
+			sayToNegotiationServer("Setting grammar to '"+targetsFileName+"'");
 		}
 
 		if (debug) sayToNegotiationServer("Translating '"+message+"'...");
-		translator.sendToTranslationServer(message, /*forward=*/true);
+		translator.sendToTranslationServer(message, /*forward=*/true, targetsFileName);
 	}
 	
 
@@ -69,7 +71,7 @@ public class NlpNegotiationClient extends NegotiationClient {
 	 */
 	@Override public NegotiationClient clone() {
 		try {
-			return new NlpNegotiationClient(domain, serverUrl, gameType, translationServerUrl);
+			return new NlpNegotiationClient(domain, serverUrl, gameType, translationServerUrl, targetsFileName);
 		} catch (MalformedURLException e) {
 			throw new RuntimeException("Cannot clone",e);
 		}
@@ -109,6 +111,6 @@ public class NlpNegotiationClient extends NegotiationClient {
 			System.exit(1);
 		}
 		java.util.logging.Logger.getLogger("io.socket").setLevel(Level.WARNING);
-		new NlpNegotiationClient(new Domain(args[0]), args[1], args[2], args[3]).start();  // Start the first client. It will launch new clients as the need arises.
+		new NlpNegotiationClient(new Domain(args[0]), args[1], args[2], args[3], "NegotiationGrammarSmall.txt").start();  // Start the first client. It will launch new clients as the need arises.
 	}
 }

@@ -33,12 +33,12 @@ public abstract class SocketioTranslator<TransformationType extends Translation>
 		translationSocket.connect(serverUrl, this);
 	}
 
-	public void sendToTranslationServer(String input, boolean forward) {
+	public void sendToTranslationServer(String input, boolean forward, String targetsFileName) {
 		try {
 			translationSocket.emit("translate", new JSONObject()
 				.put("text", input)
 				.put("forward", forward)
-				.put("targetsFileName", "")
+				.put("targetsFileName", targetsFileName)
 				);
 		} catch (JSONException e) {
 			throw new RuntimeException("Cannot translate", e);
