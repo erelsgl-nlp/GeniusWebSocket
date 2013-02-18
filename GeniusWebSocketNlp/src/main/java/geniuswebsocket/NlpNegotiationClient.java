@@ -47,7 +47,6 @@ public class NlpNegotiationClient extends NegotiationClient {
 		this.targetsFileName = targetsFileName;
 	}
 
-	
 	/**
 	 * This function is called whenever the partner sends a message in natural language.
 	 */
@@ -55,21 +54,19 @@ public class NlpNegotiationClient extends NegotiationClient {
 		if (message.startsWith("debug=")) {
 			debug = (message.replace("debug=","").equals("1"));
 			sayToNegotiationServer("Setting debug to '"+debug+"'");
-		}
-		if (message.startsWith("grammar=")) {
+		} else if (message.startsWith("grammar=")) {
 			targetsFileName = message.replace("grammar=","");
 			sayToNegotiationServer("Setting grammar to '"+targetsFileName+"'");
+		} else {
+			if (debug) sayToNegotiationServer("Translating '"+message+"'...");
+			translator.sendToTranslationServer(message, /*forward=*/true, targetsFileName);
 		}
-
-		if (debug) sayToNegotiationServer("Translating '"+message+"'...");
-		translator.sendToTranslationServer(message, /*forward=*/true, targetsFileName);
 	}
-	
 
 	/**
 	 * This function is called whenever a new partner joins and starts negotiating with the current client.
 	 */
-	@Override public NegotiationClient clone() {
+	@Override public NlpNegotiationClient clone() {
 		try {
 			return new NlpNegotiationClient(domain, serverUrl, gameType, translationServerUrl, targetsFileName);
 		} catch (MalformedURLException e) {
@@ -83,28 +80,26 @@ public class NlpNegotiationClient extends NegotiationClient {
 			/**
 			 * This function is called whenever the translator returns a semantic representation.
 			 */
-			@Override public void onTranslation(List<String> results) {
-				String message="";
-				System.out.println("NlpNegotiationClient received translations: "+StringUtil.join(results, " AND "));
-				if (debug) sayToNegotiationServer("I got "+results.size()+" translations.");
-				if (results.size()==0) {
-					sayToNegotiationServer("I didn't understsand your message '"+message+"'. Please say it in other words.");
+			@Override public void onTranslation(String text, List<String> translations) {
+				String semantics = StringUtil.join(translations, " AND ");
+				System.out.println("NlpNegotiationClient received translations: "+semantics);
+				if (debug) sayToNegotiationServer("I got "+translations.size()+" translations.");
+				if (translations.size()==0) {
+					sayToNegotiationServer("What did you mean when you said '"+text+"'? Please say it in other words.");
 					return;
 				}
-
-				String semantics = StringUtil.join(results, " AND ");
 				sayToNegotiationServer("I think you meant '"+semantics+"'.");
 			}
 		};
 	}
 
-	
+
 	/*
 	 * Main program:
 	 */
-	
+
 	private static String thisClassName = Thread.currentThread().getStackTrace()[1].getClassName();
-	
+
 	public static void main(String[] args) throws Exception {
 		if (args.length<4) {
 			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-type> <url-of-translation-server>");

@@ -83,16 +83,18 @@ public abstract class SocketioTranslator<TransformationType extends Translation>
 	@Override public void on(String event, IOAcknowledge ack, Object... args) {
 		System.out.println("SocketioTranslator receives event '" + event + "' arg0="+args[0]);
 		if ("translation".equals(event)) {
-			JSONArray results = (JSONArray)args[0];
+			JSONObject result = (JSONObject)args[0];
 			try {
-				onTranslation(jsonArrayToJavaList(results));
+				String text = result.getString("text");
+				JSONArray translations = result.getJSONArray("translations");
+				onTranslation(text, jsonArrayToJavaList(translations));
 			} catch (JSONException e) {
 				throw new RuntimeException("Cannot handle translation event",e);
 			}
 		}
 	}
 
-	public abstract void onTranslation(List<String> results);
+	public abstract void onTranslation(String text, List<String> translations);
 
 
 

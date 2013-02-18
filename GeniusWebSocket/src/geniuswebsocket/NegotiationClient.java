@@ -19,16 +19,10 @@ import io.socket.SocketIOException;
 import negotiator.ActionListener;
 import negotiator.Agent;
 import negotiator.AgentID;
-import negotiator.Bid;
 import negotiator.Domain;
 import negotiator.WorldInformation;
 import negotiator.actions.*;
 import negotiator.exceptions.NegotiatorException;
-import negotiator.exceptions.UnknownIssueException;
-import negotiator.exceptions.UnknownValueException;
-import negotiator.issue.Issue;
-import negotiator.issue.IssueDiscrete;
-import negotiator.issue.Value;
 import negotiator.tournament.VariablesAndValues.AgentParamValue;
 import negotiator.tournament.VariablesAndValues.AgentParameterVariable;
 import negotiator.utility.UtilitySpace;
@@ -249,37 +243,16 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	/**
 	 * @param jsonBid a JSON object that represents a bid - {issue1:value1, issue2:value2, ...}
 	 */
-	public void onPartnerOffer(JSONObject jsonBid) throws JSONException, UnknownIssueException, UnknownValueException {
+	public void onPartnerOffer(JSONObject json) {
 		//System.out.println(arg0.toString(2));
-		HashMap<Integer, Value> demandedBidValues = new HashMap<Integer, Value>();  // collect specific-issue actions
-		for (Iterator<?> iIssue = jsonBid.keys(); iIssue.hasNext();) {
-			String issueName = (String)iIssue.next();
-			if (issueName.isEmpty()) continue;
-			String valueName = jsonBid.getString(issueName);
-			if (valueName.isEmpty()) continue;
-
-			Issue issue = domain.issueByName(issueName);
-			if (issue==null)
-				throw new UnknownIssueException(issueName);
-			switch(issue.getType()) {
-				case DISCRETE:
-					IssueDiscrete issueDiscrete = (IssueDiscrete)issue;
-					Value value = issueDiscrete.valueByName(valueName);
-					if (value==null)
-						throw new UnknownValueException(issueDiscrete, valueName);
-					demandedBidValues.put(issue.getNumber(), value);
-					break;
-				default:
-					throw new UnsupportedOperationException("Only discrete types are supported currently!");
-			}
-		}
-
-		if (!demandedBidValues.isEmpty()) {
-			Bid theBid = new Bid(domain, demandedBidValues);
-			//if (bidTime!=null)
-			//	theBid.setTime(bidTime);
-			Action theAction = new Offer(agentIdOfOtherPlayer, theBid);
-			agent.ReceiveMessage(theAction);
+		try {
+			List<Action> actions = JsonToGeniusBridge.jsonObjectToGeniusAction(json, domain, agentIdOfOtherPlayer);
+			for (Action action: actions)
+				agent.ReceiveMessage(action);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			//sayToNegotiationServer("There was an exception when I tried to understand what you said: "+ex);
+			sayToNegotiationServer("I could not understand you because "+ex.getMessage()+"!");
 		}
 	}
 
