@@ -3,13 +3,16 @@ import java.net.MalformedURLException;
 import java.util.*;
 import java.util.logging.Level;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.excitementproject.eop.common.utilities.StringUtil;
 import ac.biu.nlp.translate.*;
 import geniuswebsocket.NegotiationClient;
 import negotiator.Domain;
 
 /**
- * A socket.io client that negotiates with humans. 
+ * A socket.io client that negotiates with humans.
  *
  * @author Erel Segal Halevi
  * @since 2013-02
@@ -59,7 +62,11 @@ public class NlpNegotiationClient extends NegotiationClient {
 			sayToNegotiationServer("Setting grammar to '"+targetsFileName+"'");
 		} else {
 			if (debug) sayToNegotiationServer("Translating '"+message+"'...");
-			translator.sendToTranslationServer(message, /*forward=*/true, targetsFileName);
+			try {
+				translator.sendToTranslationServer(message, /*forward=*/true, targetsFileName);
+			} catch (MalformedURLException e) {
+				sayToNegotiationServer("Cannot translate because: "+e);
+			}
 		}
 	}
 
@@ -81,14 +88,21 @@ public class NlpNegotiationClient extends NegotiationClient {
 			 * This function is called whenever the translator returns a semantic representation.
 			 */
 			@Override public void onTranslation(String text, List<String> translations) {
-				String semantics = StringUtil.join(translations, " AND ");
-				System.out.println("NlpNegotiationClient received translations: "+semantics);
 				if (debug) sayToNegotiationServer("I got "+translations.size()+" translations.");
 				if (translations.size()==0) {
 					sayToNegotiationServer("What did you mean when you said '"+text+"'? Please say it in other words.");
 					return;
 				}
-				sayToNegotiationServer("I think you meant '"+semantics+"'.");
+				
+				String semantics = StringUtil.join(translations, " AND ");
+				System.out.println("NlpNegotiationClient received translations: "+semantics);
+				try {
+					JSONObject action = JsonUtils.deepMerge(translations);
+					if (debug) sayToNegotiationServer("I think you mean '"+action+"'.");
+					onPartnerOffer(action);
+				} catch (JSONException e) {
+					sayToNegotiationServer("I think you mean '"+semantics+"' but I can't understand further.");
+				}
 			}
 		};
 	}
@@ -106,6 +120,8 @@ public class NlpNegotiationClient extends NegotiationClient {
 			System.exit(1);
 		}
 		java.util.logging.Logger.getLogger("io.socket").setLevel(Level.WARNING);
-		new NlpNegotiationClient(new Domain(args[0]), args[1], args[2], args[3], "NegotiationGrammarSmall.txt").start();  // Start the first client. It will launch new clients as the need arises.
+		
+		for (String gameType: new String[] {"negochat", "negomenus"}) 
+			new NlpNegotiationClient(new Domain(args[0]), args[1], gameType, args[3], "NegotiationGrammarJson.txt").start();  // Start the first client. It will launch new clients as the need arises.
 	}
 }

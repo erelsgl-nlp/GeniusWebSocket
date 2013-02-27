@@ -16,7 +16,12 @@ import org.json.JSONObject;
 import ac.biu.nlp.translate.*;
 
 /**
- * An asynchronous translator that uses a SocketIO connection.
+ * A client to a translation server. To use, create a sub-class MyTranslator and override "onTranslation". Then:
+ * 
+ * <p>MyTranslator t = new MyTranslator("http://localhost:4000"); // connect to socket.io server
+ * <p>t.sendToTranslationServer("hello", true, "targets.txt");    // send a translation-request to the server
+ * 
+ * When the server sends a translation, it will be sent to the method "onTranslation".
  *
  * @author Erel Segal Halevi
  * @since 2013-02-17
@@ -27,18 +32,25 @@ public abstract class SocketioTranslator<TransformationType extends Translation>
 	 * socket for connecting to the SocketIO translation server:
 	 */
 	protected SocketIO translationSocket;
+	
+	protected String serverUrl;
 
-	public SocketioTranslator(String serverUrl) throws MalformedURLException {
-		translationSocket = new SocketIO();
-		translationSocket.connect(serverUrl, this);
+	public SocketioTranslator(String serverUrl)   {
+		this.serverUrl = serverUrl;
+		translationSocket = null;
 	}
 
-	public void sendToTranslationServer(String input, boolean forward, String targetsFileName) {
+	public void sendToTranslationServer(String input, boolean forward, String targetsFileName)  throws MalformedURLException {
 		try {
+			if (translationSocket==null || !translationSocket.isConnected()) {
+				translationSocket = new SocketIO();
+				translationSocket.connect(serverUrl, this);
+			}
 			translationSocket.emit("translate", new JSONObject()
 				.put("text", input)
 				.put("forward", forward)
 				.put("targetsFileName", targetsFileName)
+				.put("numOfThreads", /*keep current number of threads*/ 0)
 				);
 		} catch (JSONException e) {
 			throw new RuntimeException("Cannot translate", e);
@@ -81,8 +93,8 @@ public abstract class SocketioTranslator<TransformationType extends Translation>
 	}
 
 	@Override public void on(String event, IOAcknowledge ack, Object... args) {
-		System.out.println("SocketioTranslator receives event '" + event + "' arg0="+args[0]);
 		if ("translation".equals(event)) {
+			System.out.println("SocketioTranslator receives event '" + event + "' arg0="+args[0]);
 			JSONObject result = (JSONObject)args[0];
 			try {
 				String text = result.getString("text");

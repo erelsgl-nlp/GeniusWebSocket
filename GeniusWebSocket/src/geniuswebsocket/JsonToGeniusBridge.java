@@ -1,9 +1,6 @@
 package geniuswebsocket;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,12 +11,9 @@ import negotiator.Domain;
 import negotiator.actions.Action;
 import negotiator.actions.BidAction;
 import negotiator.actions.Offer;
-import negotiator.exceptions.NegotiatorException;
-import negotiator.exceptions.UnknownIssueException;
-import negotiator.exceptions.UnknownValueException;
-import negotiator.issue.Issue;
-import negotiator.issue.IssueDiscrete;
-import negotiator.issue.Value;
+import negotiator.exceptions.*;
+import negotiator.gui.nlp.GrammarToGeniusBridge;
+import negotiator.issue.*;
 
 /**
  * Utility functions that bridge between JSON objects 
@@ -32,7 +26,54 @@ import negotiator.issue.Value;
 public class JsonToGeniusBridge {
 	
 	private JsonToGeniusBridge() { /* Prevent initialization */ }
+	
+	
+	/**
+	 * @param json an object such as {"issue1": "value1", "issue2": "value2", ...}
+	 * @param domain
+	 * @param thisAgent
+	 * @param bidTime
+	 * @param opponentLatestBidAction
+	 * @param speakerLatestBidAction
+	 * @return a hash-map from issues to values (must be a HashMap because of dependencies in genius.Bid...)
+	 */
+	public static HashMap<Integer, Value> jsonObjectToGeniusBidValues(JSONObject json, Domain domain) throws NegotiatorException, JSONException {
+		HashMap<Integer, Value> bidValues = new HashMap<Integer, Value>();  // collect specific-issue actions
+		for (Iterator<?> iIssue = json.keys(); iIssue.hasNext();) {
+			String issueName = (String)iIssue.next();
+			String valueName = json.getString(issueName);
+			GrammarToGeniusBridge.putIssueValuePairInBid(domain, issueName, valueName, bidValues);
+		}
+		return bidValues;
+	}
+	
+	/**
+	 * Go over all objects in the array, and merge fields with equal names.
+	 * @param objects
+	 * @return the merged object.
+	 * @throws JSONException 
+	 */
+	public static JSONObject deepMergeJsonObjects(JSONObject[] objects) throws JSONException {
+		JSONObject whole = new JSONObject();
+		for (JSONObject part: objects) {
+			for (Iterator<?> iKey = part.keys(); iKey.hasNext();) {
+				String key = (String)iKey.next();
+				Object value = part.get(key);
+				
+				if (!whole.has(key)) {
+					// new value for "key":
+					whole.put(key, value);
+				} else {
+					// existing value for "key" - deep merge:
+					
+				}
+			}
+		}
+		return whole;
+	}
+	
 
+	
 	/**
 	 * @see negotiator.gui.nlp.GrammarToGeniusBridge#semanticStringToGeniusAction
 	 */
@@ -43,48 +84,28 @@ public class JsonToGeniusBridge {
 		Bid opponentLatestBid = opponentLatestBidAction==null? null: opponentLatestBidAction.getBid();
 		Bid speakerLatestBid = speakerLatestBidAction==null? null: speakerLatestBidAction.getBid();
 		
-		HashMap<Integer, Value> demandedBidValues = new HashMap<Integer, Value>();  // collect specific-issue actions
-		for (Iterator<?> iIssue = json.keys(); iIssue.hasNext();) {
-			String issueName = (String)iIssue.next();
-			if (issueName.isEmpty()) continue;
-			String valueName = json.getString(issueName);
-			if (valueName.isEmpty()) continue;
-
-			Issue issue = domain.issueByName(issueName);
-			if (issue==null)
-				throw new UnknownIssueException(issueName);
-			switch(issue.getType()) {
-				case DISCRETE:
-					IssueDiscrete issueDiscrete = (IssueDiscrete)issue;
-					Value value = issueDiscrete.valueByName(valueName);
-					if (value==null)
-						throw new UnknownValueException(issueDiscrete, valueName);
-					demandedBidValues.put(issue.getNumber(), value);
-					break;
-				default:
-					throw new UnsupportedOperationException("Only discrete types are supported currently!");
+		if (json.has("offer")) {
+			JSONObject jsonBid = json.getJSONObject("offer");
+			HashMap<Integer, Value> demandedBidValues = jsonObjectToGeniusBidValues(jsonBid, domain);
+			if (!demandedBidValues.isEmpty()) {
+				Bid theBid = new Bid(domain, demandedBidValues);
+				if (bidTime!=null)
+					theBid.setTime(bidTime);
+				Action theAction = new Offer(thisAgent, theBid);
+				actions.add(theAction);
 			}
-		}
-		
-		if (!demandedBidValues.isEmpty()) {
-			Bid theBid = new Bid(domain, demandedBidValues);
-			if (bidTime!=null)
-				theBid.setTime(bidTime);
-			Action theAction = new Offer(thisAgent, theBid);
-			actions.add(theAction);
 		}
 		
 		return actions;
 	}
-	
+
 	public static List<Action> jsonObjectToGeniusAction(JSONObject json, Domain domain, AgentID thisAgent) throws NegotiatorException, JSONException {
 		return jsonObjectToGeniusAction(json, domain, thisAgent, null, null, null);
 	}
 	
 	/**
-	 * @param args
+	 * demo program
 	 */
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws JSONException {
 	}
 }
