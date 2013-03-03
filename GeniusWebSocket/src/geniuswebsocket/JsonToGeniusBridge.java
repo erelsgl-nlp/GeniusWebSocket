@@ -8,11 +8,15 @@ import org.json.JSONObject;
 import negotiator.AgentID;
 import negotiator.Bid;
 import negotiator.Domain;
+import negotiator.actions.Accept;
 import negotiator.actions.Action;
 import negotiator.actions.BidAction;
+import negotiator.actions.EndNegotiation;
 import negotiator.actions.Offer;
+import negotiator.actions.Reject;
 import negotiator.exceptions.*;
 import negotiator.gui.nlp.GrammarToGeniusBridge;
+import negotiator.gui.nlp.PatternCache;
 import negotiator.issue.*;
 
 /**
@@ -33,8 +37,8 @@ public class JsonToGeniusBridge {
 	 * @param domain
 	 * @param thisAgent
 	 * @param bidTime
-	 * @param opponentLatestBidAction
-	 * @param speakerLatestBidAction
+	 * @param partnerLatestBidAction
+	 * @param ourLatestBidAction
 	 * @return a hash-map from issues to values (must be a HashMap because of dependencies in genius.Bid...)
 	 */
 	public static HashMap<Integer, Value> jsonObjectToGeniusBidValues(JSONObject json, Domain domain) throws NegotiatorException, JSONException {
@@ -80,27 +84,92 @@ public class JsonToGeniusBridge {
 	@SuppressWarnings("unused")
 	public static List<Action> jsonObjectToGeniusAction(JSONObject json, Domain domain, AgentID thisAgent, Integer bidTime, BidAction opponentLatestBidAction, BidAction speakerLatestBidAction) throws NegotiatorException, JSONException {
 		List<Action> actions = new ArrayList<Action>();
+		if (json==null) return actions; // no actions
 
 		Bid opponentLatestBid = opponentLatestBidAction==null? null: opponentLatestBidAction.getBid();
 		Bid speakerLatestBid = speakerLatestBidAction==null? null: speakerLatestBidAction.getBid();
 		
-		if (json.has("offer")) {
-			JSONObject jsonBid = json.getJSONObject("offer");
+		if (json.has("Offer")) {
+			JSONObject jsonBid = json.getJSONObject("Offer");
 			HashMap<Integer, Value> demandedBidValues = jsonObjectToGeniusBidValues(jsonBid, domain);
 			if (!demandedBidValues.isEmpty()) {
 				Bid theBid = new Bid(domain, demandedBidValues);
 				if (bidTime!=null)
 					theBid.setTime(bidTime);
-				Action theAction = new Offer(thisAgent, theBid);
-				actions.add(theAction);
+				actions.add(new Offer(thisAgent, theBid));
 			}
 		}
-		
+		if (json.has("Accept")) {
+			if (opponentLatestBid==null) 
+				throw new NegotiatorException("What do you accept? I didn't offer anything");
+			actions.add(new Accept(thisAgent, opponentLatestBidAction));
+		}
+		if (json.has("Reject")) {
+			if (opponentLatestBid==null) 
+				throw new NegotiatorException("What do you reject? I didn't offer anything");
+			actions.add(new Reject(thisAgent, opponentLatestBidAction));
+		}
+		if (json.has("Quit")) {
+			actions.add(new EndNegotiation(thisAgent));
+		}
+		if (json.has("Insist")) {
+			if (speakerLatestBid==null) 
+				throw new NegotiatorException("What do you insist? You didn't offer anything");
+			String issueName = json.getString("Insist");
+			if (issueName.equals("previous")) {
+				actions.add(new Offer(thisAgent, speakerLatestBid));
+				//copyValuesForNonexistingKeys(agreedBidValues, speakerLatestBid.getValues());
+			} else {
+				//copyValueForIssue(domain, speakerLatestBid, issueName, demandedBidValues);
+			}
+		}
+		/*if (json.has("PartialAgree")) {
+			if (opponentLatestBid==null) 
+				throw new IllegalArgumentException("partial agreement without a base opponent action");
+			String issueName = json.getString("PartialAgree");
+			if (issueName.equals("general")) {
+				copyValuesForNonexistingKeys(agreedBidValues, opponentLatestBid.getValues());
+			} else {
+				copyValueForIssue(domain, opponentLatestBid, issueName, demandedBidValues);
+			}
+		}
+		if (json.has("Append")) {
+			if (speakerLatestBid==null) 
+				throw new IllegalArgumentException("append without a base speaker action");
+			copyValuesForNonexistingKeys(agreedBidValues,speakerLatestBid.getValues());
+		}
+		*/
 		return actions;
 	}
 
 	public static List<Action> jsonObjectToGeniusAction(JSONObject json, Domain domain, AgentID thisAgent) throws NegotiatorException, JSONException {
 		return jsonObjectToGeniusAction(json, domain, thisAgent, null, null, null);
+	}
+	
+	public static JSONObject geniusBidToJsonObject(Bid bid, Domain domain) throws JSONException {
+		JSONObject json = new JSONObject();
+		for (Map.Entry<Integer, Value> entry: bid.getValues().entrySet()) {
+			String issueName = domain.getObjective(entry.getKey()).getName();
+			json.put(issueName, entry.getValue());
+		}
+		return json;
+	}
+	
+	public static JSONObject geniusActionToJsonObject(Action geniusAction, Domain domain) throws JSONException {
+		JSONObject json = new JSONObject();
+		if (geniusAction instanceof BidAction) {
+			JSONObject jsonBid = geniusBidToJsonObject(((BidAction)geniusAction).getBid(), domain);
+			json.put("Offer", jsonBid);
+		} else if (geniusAction instanceof Reject) {
+			JSONObject jsonBid = geniusBidToJsonObject(((Reject)geniusAction).getAcceptedOrRejectedAction().getBid(), domain);
+			json.put("Reject", jsonBid);
+		} else if (geniusAction instanceof Accept) {
+			JSONObject jsonBid = geniusBidToJsonObject(((Reject)geniusAction).getAcceptedOrRejectedAction().getBid(), domain);
+			json.put("Accept", jsonBid);
+		} else if (geniusAction instanceof EndNegotiation) {
+			json.put("Quit", true);
+		}
+		return json;
 	}
 	
 	/**
