@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Project GeniusWebSocket - create and deploy jar">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+	
+	<property name="jar_path" value="/media/nlp-srv/E/Apps" />
+	<property name="jar_name" value="GeniusWebSocket.jar" />
+
+	<target name="create_run_jar">
+		<jar destfile="${jar_name}" filesetmanifest="mergewithoutmain" duplicate="preserve">
+            <manifest>
+                <attribute name="Main-Class" value="geniuswebsocket.NegotiationClient"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="/home/erelsgl/git/GeniusWebSocket/GeniusWebSocket/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/absolutelayout.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jtreetable.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jaxb-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jsr173_1.0_api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/activation.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jaxb1-impl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jaxb-impl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jaxb-xjc.jar"/>
+            <fileset dir="/host/workspace/GeniusBI/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jcommon-1.0.13.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/jfreechart-1.0.10.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/swing-layout-1.0.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/swing-worker-1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/appframework-1.0.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/eclipse/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/eclipse/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/JPGF-1.0.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/host/workspace/GeniusBI/dep/guava-12.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/erelsgl/git/socket.io-java-client/libs/json-org.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/erelsgl/git/socket.io-java-client/libs/WebSocket.jar"/>
+            <fileset dir="/home/erelsgl/git/socket.io-java-client/bin"/>
+        </jar>
+    
+		<copy file="${jar_name}" tofile="${jar_path}/${jar_name}" verbose="true" />
+	</target>
+</project>

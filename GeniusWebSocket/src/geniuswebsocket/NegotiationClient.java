@@ -34,7 +34,7 @@ import agents.biu.KBAgent;
 /**
  * A socket.io client that negotiates with humans. 
  *
- * @author Erel Segal Halevi
+ * @author Erel Segal-Halevi
  * @since 2013-02
  */
 public class NegotiationClient implements IOCallback, Cloneable {
@@ -129,7 +129,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 					System.out.println(gameType+" agent says: "+jsonActions);
 					negotiationSocket.emit("negoactions", jsonActions);
 				} catch (JSONException e) {
-					sayToNegotiationServer("My strategic agent said something I didn't understand: "+agentIdOfThisAgent);
+					sayToPartner("My strategic agent said something I didn't understand: "+agentIdOfThisAgent);
 				}
 			}
 		});
@@ -232,8 +232,12 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	 */
 
 	public void onPartnerConnect()  {
-		sayToNegotiationServer("Hello! I am the "+agentIdOfThisAgent);
+		sayToPartner("Hello! I am the "+agentIdOfThisAgent);
 	}
+	
+	NaturalLanguageCollection replyToAccept = new NaturalLanguageCollection("Great, so we can sign the agreement", "I am happy that you agree", "It is a pleasure doing business with you");
+	NaturalLanguageCollection replyToReject = new NaturalLanguageCollection("Too bad you disagree", "Why did you reject my offer?", "This is a good offer, think about it again");
+	NaturalLanguageCollection replyToGreet  = new NaturalLanguageCollection("Hello", "Hi", "Nice to meet you");
 	
 	/**
 	 * The (human) partner sent some actions - forward them to the agent. 
@@ -243,34 +247,46 @@ public class NegotiationClient implements IOCallback, Cloneable {
 		System.out.println("    "+gameType+" partner actions:   "+actions);
 		try {
 			if (!(actions instanceof JSONObject)) {
-				sayToNegotiationServer("I didn't understand what you meant to say - I got a wrong-format action list: "+actions);
+				sayToPartner("I didn't understand what you meant to say - I got a wrong-format action list: "+actions);
 				return;
 			}
 			JSONObject actionsJson = (JSONObject)actions;
 			if (!(actionsJson.keys().hasNext())) {
-				sayToNegotiationServer("I didn't understand what you meant to say - I got an empty action list: "+actionsJson);
+				sayToPartner("I didn't understand what you meant to say - I got an empty action list: "+actionsJson);
 				return;
 			}
 			List<Action> actionsGenius = JsonToGeniusBridge.jsonObjectToGeniusAction(
-				(JSONObject)actionsJson, domain, agentIdOfOtherPlayer,
+				actionsJson, domain, agentIdOfOtherPlayer,
 				/*bidTime=*/null,
 				ourLatestBidAction,
 				partnerLatestBidAction
 				);
 			System.out.println("    "+gameType+" partner actions in Genius: "+actionsGenius);
-			if (actionsGenius.isEmpty()) {
-				sayToNegotiationServer("I didn't understand what you meant to say - I couldn't identify any actions in: "+actionsJson);
-			}
+			boolean actionIdentified = false;
 			for (Action action: actionsGenius) {
 				agent.ReceiveMessage(action);
 				if (action instanceof BidAction)
 					partnerLatestBidAction = (BidAction)action;
+				if (action instanceof Accept)
+					sayToPartner(replyToAccept.randomString());
+				if (action instanceof Reject)
+					sayToPartner(replyToReject.randomString());
+				actionIdentified = true;
+			}
+			if (actionsJson.has("Greet")) {
+				sayToPartner(replyToGreet.randomString());
+				actionIdentified = true;
+			}
+				
+			if (!actionIdentified) {
+				sayToPartner("I didn't understand what you meant to say - I couldn't identify any actions in: "+actionsJson);
+				return;
 			}
 		} catch (NegotiatorException ex) {
-			sayToNegotiationServer(ex.getMessage()+"!");
+			sayToPartner(ex.getMessage()+"!");
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			sayToNegotiationServer("I could not understand you because: "+ex+"!");
+			sayToPartner("I could not understand you because: "+ex+"!");
 		}
 	}
 
@@ -287,10 +303,10 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	}
 
 	public void onPartnerDisconnect()  {
-		sayToNegotiationServer("Bye!");
+		sayToPartner("Bye!");
 	}
 	
-	public void sayToNegotiationServer(String message) {
+	public void sayToPartner(String message) {
 		negotiationSocket.emit("message",message);
 	}
 
@@ -302,12 +318,12 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	
 	public static void main(String[] args) throws Exception {
 		if (args.length<3) {
-			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-type>");
+			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-types>");
 			System.exit(1);
 		}
 		java.util.logging.Logger.getLogger("io.socket").setLevel(Level.WARNING);
 
-		for (String gameType: new String[] {"negonlp"}) 
+		for (String gameType: args[2].split(",")) 
 			new NegotiationClient(new Domain(args[0]), args[1], gameType).start();  // Start the first client. It will launch new clients as the need arises.
 	}
 }

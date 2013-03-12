@@ -1,9 +1,10 @@
 package geniuswebsocket;
 
-import java.util.*;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import negotiator.AgentID;
 import negotiator.Bid;
@@ -14,10 +15,12 @@ import negotiator.actions.BidAction;
 import negotiator.actions.EndNegotiation;
 import negotiator.actions.Offer;
 import negotiator.actions.Reject;
-import negotiator.exceptions.*;
+import negotiator.exceptions.NegotiatorException;
 import negotiator.gui.nlp.GrammarToGeniusBridge;
-import negotiator.gui.nlp.PatternCache;
-import negotiator.issue.*;
+import negotiator.issue.Value;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Utility functions that bridge between JSON objects 
@@ -81,7 +84,6 @@ public class JsonToGeniusBridge {
 	/**
 	 * @see negotiator.gui.nlp.GrammarToGeniusBridge#semanticStringToGeniusAction
 	 */
-	@SuppressWarnings("unused")
 	public static List<Action> jsonObjectToGeniusAction(JSONObject json, Domain domain, AgentID thisAgent, Integer bidTime, BidAction opponentLatestBidAction, BidAction speakerLatestBidAction) throws NegotiatorException, JSONException {
 		List<Action> actions = new ArrayList<Action>();
 		if (json==null) return actions; // no actions
