@@ -1,0 +1,3 @@
+-- Create the English semantic representation for BIUTEE entailer.
+-- Example: ...
+concrete nlp_biutee_genius of nlp_abs = nlp_incomplete_genius with (nlp_interface = nlp_instance_biutee);

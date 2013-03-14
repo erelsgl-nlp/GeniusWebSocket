@@ -1,0 +1,71 @@
+<question:initial>:
+* What do you offer[?]?
+
+<question:Salary>:
+* How much salary do you offer[?]?
+<demand:Salary:$1>:
+* I would like <Salary:$1>[.]?
+<agree:Salary:$1>:
+* I can agree to work for <Salary:$1>[.]?
+<youagree:Salary:$1>:
+* you give me <Salary:$1>[.]?
+<reject:Salary>:
+* The salary you offer is too low[.]?
+
+<question:Job Description>:
+* What position do you offer[?]?
+<demand:Job Description:$1>:
+* I want to work as a <JobDescription:$1>[.]?
+<agree:Job Description:$1>:
+* I agree to work in a <JobDescription:$1> position[.]?
+<youagree:Job Description:$1>:
+* you agree that I work as a <JobDescription:$1>[.]?
+<reject:Job Description>:
+* This job description is not good enough for me[.]?
+
+<question:Leased Car>:
+* Do you give a company car[?]?
+<demand:Leased Car:With leased car>:
+* I need a company car[.]?
+<demand:Leased Car:Without leased car>:
+* I don't want a company car[.]?
+<agree:Leased Car:Without leased car>:
+* I can do without a company car[.]?
+<youagree:Leased Car:With leased car>:
+* you promise me a company car[.]?
+<reject:Leased Car>:
+* I must have a car to get to work[.]?
+
+<question:Promotion Possibilities>:
+* What promotion track do you offer[?]?
+<demand:Promotion Possibilities:$1 promotion track>:
+* I want a <PromotionTrack:$1>[.]?
+<agree:Promotion Possibilities:$1 promotion track>:
+* I can agree to a <PromotionTrack:$1>[.]?
+<youagree:Promotion Possibilities:$1 promotion track>:
+* you agree to a <PromotionTrack:$1>[.]?
+<reject:Promotion Possibilities>:
+* This promotion track is too slow[.]?
+
+<question:Working Hours>:
+* How many hours would I work each day[?]?
+<demand:Working Hours:$1 hours>:
+* I want a daily schedule of <WorkingHours:$1>[.]?
+<agree:Working Hours:$1 hours>:
+* I can agree on a work day of <WorkingHours:$1>[.]?
+<youagree:Working Hours:$1 hours>:
+* you agree that I work <WorkingHours:$1> a day[.]?
+<reject:Working Hours>:
+* The number of daily working hours is too high[.]?
+
+<demand:Pension Fund:$1%>:
+* I want <Pension:$1>[.]?
+<agree:Pension Fund:$1%>:
+* I can agree on <Pension:$1>[.]?
+<youagree:Pension Fund:$1%>:
+* you agree to a <Pension:$1>[.]?
+<reject:Pension Fund>:
+* The pension you offer is too low[.]?
+
+<question:$1>:
+* What do you offer regarding $1[?]?

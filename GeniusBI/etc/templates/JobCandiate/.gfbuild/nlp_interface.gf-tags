@@ -1,0 +1,3 @@
+mkAdjective	oper-type	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_interface.gf:5	Str -> {s : Str}
+mkNoun	oper-type	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_interface.gf:4	Str -> {s : Str}
+mkNumber	oper-type	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_interface.gf:3	Str -> {s : Str}

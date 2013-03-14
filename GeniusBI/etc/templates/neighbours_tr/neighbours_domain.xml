@@ -1,0 +1,89 @@
+<negotiation_template number_of_sessions="1">
+ 
+<utility_space number_of_issues="0">
+
+<agent utility_space="neighbours_alex.xml" owner="alex" type="1"></agent> 
+<agent utility_space="neighbours_tyler_opp.xml" owner="alex" type="2"></agent> 
+<agent utility_space="neighbours_tyler.xml" owner="tyler" type="1"></agent> 
+<agent utility_space="neighbours_alex_opp.xml" owner="tyler" type="2"></agent> 
+ 
+<objective index="6" description="" name="root" type="objective" etype="objective"> 
+<issue index="1" name="Çöp" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="PLAYER1 çöpünü 20.00’den sonra çıkartacak"> 
+</item> 
+<item index="3" value="PLAYER1 çöpü alması için kapıcıya para verecek"> 
+</item> 
+<item index="4" value="PLAYER1 çöpünü 17.00’den sonra çıkartacak"> 
+</item> 
+<item index="5" value="PLAYER1 özel bir çöp kutusu alacak"> 
+</item> 
+<item index="6" value="PLAYER1 çöpünü merdiven aralığına çıkartacak"> 
+</item>
+</issue> 
+<issue index="2" name="Basketbol sahası" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="PLAYER1 sahayı Cumartesi günü kullanmayacak"> 
+</item> 
+<item index="3" value="PLAYER1 PLAYER2 istediğinde sahayı terk edecek"> 
+</item> 
+<item index="4" value="PLAYER1 sahayı bir saatliğine kullanacak"> 
+</item> 
+<item index="5" value="PLAYER1 sahayı iki saatliğine kullanacak"> 
+</item> 
+<item index="6" value="PLAYER1 sahayı kullanmaya devam edecek"> 
+</item> 
+</issue> 
+<issue index="3" name="Gürültü" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="PLAYER2 saat 23.00’den sonra sessiz olacak"> 
+</item> 
+<item index="3" value="PLAYER2 saat 23.30’den sonra sessiz olacak"> 
+</item> 
+<item index="4" value="PLAYER2 gece yarısından sonra sessiz olacak"> 
+</item> 
+<item index="5" value="PLAYER2 telefonla aranması durumunda sessiz olacak"> 
+</item> 
+<item index="6" value="PLAYER2 gürültü yapmaya devam edecek"> 
+</item> 
+</issue> 
+<issue index="4" name="Avlu" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="PLAYER2 avluyu kullanmaya devam edecek"> 
+</item> 
+<item index="3" value="PLAYER2 avluyu her gece iki saat kullanmayı kabul eder"> 
+</item> 
+<item index="4" value="PLAYER2 avluyu her gece bir saat kullanmayı kabul eder"> 
+</item> 
+<item index="5" value="PLAYER2 avluyu iki günde bir, bir saat kullanmayı kabul eder"> 
+</item> 
+<item index="6" value="PLAYER2 avluyu kullanmayacak"> 
+</item> 
+</issue> 
+<issue index="5" name="Araç otoparkı" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Polisi ara"> 
+</item> 
+<item index="3" value="Diğer bina sakinlerini seferber et"> 
+</item> 
+<item index="4" value="Levhalar yerleştirmek için para bağışla"> 
+</item> 
+<item index="5" value="Bina sahibine şikâyette bulun"> 
+</item> 
+<item index="6" value="Hiçbir şey yapma"> 
+</item> 
+</issue> 
+<stateissue index="6" name="Punishment" vtype="discrete" type="discrete" etype="discrete">
+<item index="1" value="probation"> 
+</item> 
+<item index="2" value="advise to evict"> 
+</item> 
+</stateissue>
+</objective> 
+</utility_space> 
+</negotiation_template> 

@@ -1,0 +1,3 @@
+-- Create the English semantic representation for Genius.
+-- Example: ...
+concrete nlp_eng_genius of nlp_abs = nlp_incomplete_genius with (nlp_interface = nlp_instance_eng);

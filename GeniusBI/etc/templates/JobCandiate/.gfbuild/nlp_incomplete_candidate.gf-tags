@@ -1,0 +1,118 @@
+Action	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Agree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Append	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Demand	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Other	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_PartialAgree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Question	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Quit	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Action_Reject	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Agree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Agree_General	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Agree_Job_Description	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:9	
+Agree_Leased_Car_Without_Leased_Car	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:10	
+Agree_Pension_Fund	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:6	
+Agree_Promotion_Possibilities	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:7	
+Agree_Salary	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:11	
+Agree_Working_Hours	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:8	
+Append	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Append_General	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Demand	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Demand_Job_Description	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:13	
+Demand_Leased_Car_No_Agreement	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Demand_Leased_Car_With_Leased_Car	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:14	
+Demand_Leased_Car_Without_Leased_Car	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:15	
+Demand_Pension_Fund	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:16	
+Demand_Pension_Fund_No_Agreement	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Demand_Promotion_Possibilities	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:17	
+Demand_Promotion_Possibilities_No_Agreement	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Demand_Salary	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:18	
+Demand_Working_Hours	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:19	
+Disagree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+DisagreeGeneral	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Float	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Happiness	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Happiness_Excellent	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Happiness_Good	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Happiness_Great	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Happiness_I_am_happy_that_you_agree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Insist	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Insist_General	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Insist_Issue	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Int	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue_job_description	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue_leased_car	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue_pension	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue_promotion_track	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue_salary	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Issue_working_hours	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+JobDescription	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+JobDescription_Programmer	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+JobDescription_Project_Manager	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+JobDescription_QA	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+JobDescription_String	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+JobDescription_Team_Manager	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Misunderstanding	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Misunderstanding_General	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Misunderstanding_Issue	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Misunderstanding_Value	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Other	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Other_I_am_waiting	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Other_String	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Other_hi	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Other_my_name_is_String	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Other_time_is_passing	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+PartialAgree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+PartialAgree_General	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+PartialAgree_Issue	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Pension	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Pension_0	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Pension_10	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Pension_20	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Pension_Int	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+PromotionTrack	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+PromotionTrack_fast	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+PromotionTrack_slow	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Question	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Question_Agreement	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Question_Final	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Question_Initial	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:21	
+Question_Issue	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:22	
+Question_Job_Description	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:23	
+Question_Leased_Car	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:24	
+Question_Promotion_Possibilities	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:25	
+Question_Salary	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:26	
+Question_Working_Hours	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:27	
+Quit	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+QuitGeneral	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Reject	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Reject_General	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Reject_IssueCount	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Reject_Job_Description	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:29	
+Reject_Leased_Car	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:30	
+Reject_Pension_Fund	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:31	
+Reject_Promotion_Possibilities	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:32	
+Reject_Salary	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:33	
+Reject_Working_Hours	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:34	
+Salary	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Salary_12000	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Salary_20000	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Salary_7000	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+Salary_Int	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+String	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+WorkingHours	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+WorkingHours_10	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+WorkingHours_8	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+WorkingHours_9	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+WorkingHours_Float	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+YouAgree	indir	nlp_incomplete		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_incomplete.gf-tags
+YouAgree_Job_Description	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:36	
+YouAgree_Leased_Car_With_Leased_Car	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:37	
+YouAgree_Pension_Fund	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:38	
+YouAgree_Promotion_Possibilities	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:39	
+YouAgree_Salary	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:40	
+YouAgree_Working_Hours	lin	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_incomplete_candidate.gf:41	
+mkAdjective	indir	nlp_interface		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_interface.gf-tags
+mkNoun	indir	nlp_interface		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_interface.gf-tags
+mkNumber	indir	nlp_interface		/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/.gfbuild/nlp_interface.gf-tags

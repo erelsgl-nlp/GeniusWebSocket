@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="dep/absolutelayout.jar"/>
+	<classpathentry kind="lib" path="dep/jtreetable.jar"/>
+	<classpathentry kind="lib" path="dep/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="dep/jsr173_1.0_api.jar"/>
+	<classpathentry kind="lib" path="dep/activation.jar"/>
+	<classpathentry kind="lib" path="dep/jaxb1-impl.jar"/>
+	<classpathentry kind="lib" path="dep/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="dep/jaxb-xjc.jar"/>
+	<classpathentry excluding="negotiator/analysis/Analysis.java|negotiator/analysis/BiddingHistoryAnalysis.java|agents/ABMPExactAgent.java|agents/QOAgent.java|agents/RandomWalkABMPAgent.java|agents/SimpleAgentOld.java|agents/SlowUIAgent.java|agents/bguagents/|agents/biuoldagents/|agents/qoagent2/|negotiator/test/|negotiator/protocol/auction/|agents/EnterBidHistoryInfoNLP.java|agents/UIAgentAsyncNLP.java|agents/EnterBidAsyncNLP.java|parser/" kind="src" path="src"/>
+	<classpathentry kind="lib" path="dep/jcommon-1.0.13.jar"/>
+	<classpathentry kind="lib" path="dep/jfreechart-1.0.10.jar"/>
+	<classpathentry kind="lib" path="dep/swing-layout-1.0.3.jar"/>
+	<classpathentry kind="lib" path="dep/swing-worker-1.1.jar"/>
+	<classpathentry kind="lib" path="dep/appframework-1.0.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="dep/JPGF-1.0.3.jar"/>
+	<classpathentry kind="lib" path="dep/guava-12.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

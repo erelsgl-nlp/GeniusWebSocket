@@ -1,0 +1,117 @@
+Action	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:5	
+Action_Agree	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:7	Agree -> Action
+Action_Append	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:13	Append -> Action
+Action_Demand	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:6	Demand -> Action
+Action_Other	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:9	Other -> Action
+Action_PartialAgree	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:8	PartialAgree -> Action
+Action_Question	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:10	Question -> Action
+Action_Quit	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:11	Quit -> Action
+Action_Reject	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:12	Reject -> Action
+Agree	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:16	
+Agree_General	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:17	Agree
+Agree_Job_Description	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:18	JobDescription -> Agree
+Agree_Leased_Car_With_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:19	Agree
+Agree_Leased_Car_Without_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:20	Agree
+Agree_Pension_Fund	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:21	Pension -> Agree
+Agree_Promotion_Possibilities	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:22	PromotionTrack -> Agree
+Agree_Salary	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:23	Salary -> Agree
+Agree_Working_Hours	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:24	WorkingHours -> Agree
+Append	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:14	
+Append_General	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:15	Append
+Demand	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:25	
+Demand_Job_Description	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:26	JobDescription -> Demand
+Demand_Leased_Car_No_Agreement	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:29	Demand
+Demand_Leased_Car_With_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:27	Demand
+Demand_Leased_Car_Without_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:28	Demand
+Demand_Pension_Fund	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:30	Pension -> Demand
+Demand_Pension_Fund_No_Agreement	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:31	Demand
+Demand_Promotion_Possibilities	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:32	PromotionTrack -> Demand
+Demand_Promotion_Possibilities_No_Agreement	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:33	Demand
+Demand_Salary	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:34	Salary -> Demand
+Demand_Working_Hours	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:35	WorkingHours -> Demand
+Disagree	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:36	
+DisagreeGeneral	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:37	Disagree
+Float	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:38	
+Happiness	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:39	
+Happiness_Excellent	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:40	Happiness
+Happiness_Good	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:41	Happiness
+Happiness_Great	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:42	Happiness
+Happiness_I_am_happy_that_you_agree	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:43	Happiness
+Insist	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:71	
+Insist_General	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:72	Insist
+Insist_Issue	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:73	Issue -> Insist
+Int	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:44	
+Issue	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:45	
+Issue_job_description	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:46	Issue
+Issue_leased_car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:47	Issue
+Issue_pension	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:48	Issue
+Issue_promotion_track	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:49	Issue
+Issue_salary	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:50	Issue
+Issue_working_hours	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:51	Issue
+JobDescription	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:52	
+JobDescription_Programmer	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:53	JobDescription
+JobDescription_Project_Manager	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:54	JobDescription
+JobDescription_QA	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:55	JobDescription
+JobDescription_String	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:56	String -> JobDescription
+JobDescription_Team_Manager	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:57	JobDescription
+Misunderstanding	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:58	
+Misunderstanding_General	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:59	Misunderstanding
+Misunderstanding_Issue	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:60	String -> Misunderstanding
+Misunderstanding_Value	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:61	String -> Issue -> Misunderstanding
+Other	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:62	
+Other_I_am_waiting	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:63	Other
+Other_String	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:65	String -> Other
+Other_hi	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:66	Other
+Other_my_name_is_String	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:67	String -> Other
+Other_time_is_passing	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:64	Other
+PartialAgree	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:68	
+PartialAgree_General	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:69	PartialAgree
+PartialAgree_Issue	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:70	Issue -> PartialAgree
+Pension	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:74	
+Pension_0	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:75	Pension
+Pension_10	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:76	Pension
+Pension_20	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:77	Pension
+Pension_Int	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:78	Int -> Pension
+PromotionTrack	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:79	
+PromotionTrack_fast	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:80	PromotionTrack
+PromotionTrack_slow	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:81	PromotionTrack
+Question	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:82	
+Question_Agreement	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:83	Question
+Question_Final	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:84	Question
+Question_Initial	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:85	Question
+Question_Issue	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:86	Issue -> Question
+Question_Job_Description	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:87	Question
+Question_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:88	Question
+Question_Promotion_Possibilities	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:89	Question
+Question_Salary	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:90	Question
+Question_Working_Hours	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:91	Question
+Quit	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:92	
+QuitGeneral	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:93	Quit
+Reject	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:94	
+Reject_General	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:95	Reject
+Reject_IssueCount	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:96	Int -> Reject
+Reject_Job_Description	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:97	Reject
+Reject_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:98	Reject
+Reject_Pension_Fund	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:99	Reject
+Reject_Promotion_Possibilities	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:100	Reject
+Reject_Salary	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:101	Reject
+Reject_Working_Hours	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:102	Reject
+Salary	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:103	
+Salary_12000	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:104	Salary
+Salary_20000	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:105	Salary
+Salary_7000	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:106	Salary
+Salary_Int	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:107	Int -> Salary
+String	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:108	
+WorkingHours	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:109	
+WorkingHours_10	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:110	WorkingHours
+WorkingHours_8	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:111	WorkingHours
+WorkingHours_9	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:112	WorkingHours
+WorkingHours_Float	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:113	Float -> WorkingHours
+YouAgree	cat	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:114	
+YouAgree_Job_Description	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:115	JobDescription -> YouAgree
+YouAgree_Leased_Car_With_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:117	YouAgree
+YouAgree_Leased_Car_Without_Leased_Car	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:116	YouAgree
+YouAgree_Pension_Fund	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:118	Pension -> YouAgree
+YouAgree_Promotion_Possibilities	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:119	PromotionTrack -> YouAgree
+YouAgree_Salary	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:120	Salary -> Agree
+YouAgree_Working_Hours	fun	/home/erelsgl/workspace/GeniusBI/etc/templates/JobCandiate/nlp_abs.gf:121	WorkingHours -> YouAgree

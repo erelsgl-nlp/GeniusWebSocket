@@ -1,0 +1,76 @@
+<negotiation_template number_of_sessions="1"> 
+<agent utility_space="" name="" class=""> 
+</agent> 
+<agent utility_space="" name="" class=""> 
+</agent> 
+<utility_space number_of_issues="0"> 
+<objective index="6" description="" name="root" type="objective" etype="objective"> 
+<issue index="1" name="Capital" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="$15000 Sands $0 Martin"> 
+</item> 
+<item index="3" value="$12000 Sands $3000 Martin"> 
+</item> 
+<item index="4" value="$10000 Sands $5000 Martin"> 
+</item> 
+<item index="5" value="$7500 Sands $7500 Martin"> 
+</item> 
+<item index="6" value="$5000 Sands $10000 Martin"> 
+</item>
+<item index="7" value="$3000 Sands $12000 Martin"> 
+</item>
+<item index="8" value="$0 Sands $15000 Martin"> 
+</item>
+</issue> 
+<issue index="2" name="Space" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Martin promises to pay space lease"> 
+</item> 
+<item index="3" value="Martin takes over space lease"> 
+</item> 
+<item index="4" value="Terminate space lease"> 
+</item> 
+<item index="5" value="Sands takes over space lease"> 
+</item> 
+<item index="6" value="Sands promises to pay space lease"> 
+</item> 
+</issue> 
+<issue index="3" name="Van" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Martin promises to pay van lease"> 
+</item> 
+<item index="3" value="Martin takes over van lease"> 
+</item> 
+<item index="4" value="Terminate van lease"> 
+</item> 
+<item index="5" value="Sands takes over van lease"> 
+</item> 
+<item index="6" value="Sands promises to pay van lease"> 
+</item> 
+</issue> 
+<issue index="4" name="Equipment" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Martin promises to pay equipment lease"> 
+</item> 
+<item index="3" value="Martin takes over equipment lease"> 
+</item> 
+<item index="4" value="Terminate equipment lease"> 
+</item> 
+<item index="5" value="Sands takes over equipment lease"> 
+</item> 
+<item index="6" value="Sands promises to pay equipment lease"> 
+</item> 
+</issue> 
+<stateissue index="6" name="Punishment" vtype="discrete" type="discrete" etype="discrete">
+<item index="1" value="probation"> 
+</item> 
+<item index="2" value="advise to evict"> 
+</item> 
+</stateissue>
+</objective> 
+</utility_space> 
+</negotiation_template> 

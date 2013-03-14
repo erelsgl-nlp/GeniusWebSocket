@@ -1,0 +1,88 @@
+<utility_space> 
+<objective index="0" description="" name="root" type="objective" etype="objective"> 
+<issue index="1" name="Çöp" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER1 çöpünü 20.00’den sonra çıkartacak" cost="0.0" evaluation="4"> 
+</item>               
+<item index="3" value="PLAYER1 çöpü alması için kapıcıya para verecek" cost="0.0" evaluation="3"> 
+</item>               
+<item index="4" value="PLAYER1 çöpünü 17.00’den sonra çıkartacak" cost="0.0" evaluation="2"> 
+</item>               
+<item index="5" value="PLAYER1 özel bir çöp kutusu alacak" cost="0.0" evaluation="1"> 
+</item>               
+<item index="6" value="PLAYER1 çöpünü merdiven aralığına çıkartacak" cost="0.0" evaluation="0"> 
+</item> 
+</issue> 
+<issue index="2" name="Basketbol sahası" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER1 sahayı Cumartesi günü kullanmayacak" cost="0.0" evaluation="4"> 
+</item>               
+<item index="3" value="PLAYER1 PLAYER2 istediğinde sahayı terk edecek" cost="0.0" evaluation="3"> 
+</item>               
+<item index="4" value="PLAYER1 sahayı bir saatliğine kullanacak" cost="0.0" evaluation="2"> 
+</item>               
+<item index="5" value="PLAYER1 sahayı iki saatliğine kullanacak" cost="0.0" evaluation="1"> 
+</item>               
+<item index="6" value="PLAYER1 sahayı kullanmaya devam edecek" cost="0.0" evaluation="0"> 
+</item> 
+</issue> 
+<issue index="3" name="Gürültü" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER2 saat 23.00’den sonra sessiz olacak" cost="0.0" evaluation="0"> 
+</item>               
+<item index="3" value="PLAYER2 saat 23.30’den sonra sessiz olacak" cost="0.0" evaluation="1"> 
+</item>               
+<item index="4" value="PLAYER2 gece yarısından sonra sessiz olacak" cost="0.0" evaluation="2"> 
+</item>               
+<item index="5" value="PLAYER2 telefonla aranması durumunda sessiz olacak" cost="0.0" evaluation="3"> 
+</item>               
+<item index="6" value="PLAYER2 gürültü yapmaya devam edecek" cost="0.0" evaluation="4"> 
+</item> 
+</issue> 
+<issue index="4" name="Avlu" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER2 avluyu kullanmaya devam edecek" cost="0.0" evaluation="4"> 
+</item>               
+<item index="3" value="PLAYER2 avluyu her gece iki saat kullanmayı kabul eder" cost="0.0" evaluation="3"> 
+</item>               
+<item index="4" value="PLAYER2 avluyu her gece bir saat kullanmayı kabul eder" cost="0.0" evaluation="2"> 
+</item>               
+<item index="5" value="PLAYER2 avluyu iki günde bir, bir saat kullanmayı kabul eder" cost="0.0" evaluation="1"> 
+</item>               
+<item index="6" value="PLAYER2 avluyu kullanmayacak" cost="0.0" evaluation="0"> 
+</item> 
+</issue> 
+<issue index="5" name="Araç otoparkı" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="Polisi ara" cost="0.0" evaluation="4"> 
+</item>               
+<item index="3" value="Diğer bina sakinlerini seferber et" cost="0.0" evaluation="3"> 
+</item>               
+<item index="4" value="Levhalar yerleştirmek için para bağışla" cost="0.0" evaluation="2"> 
+</item>               
+<item index="5" value="Bina sahibine şikâyette bulun" cost="0.0" evaluation="1"> 
+</item>               
+<item index="6" value="Hiçbir şey yapma" cost="0.0" evaluation="0"> 
+</item> 
+</issue> 
+<weight index="1" value="0.2"> 
+</weight> 
+<weight index="2" value="0.333333333"> 
+</weight> 
+<weight index="3" value="0.266666667"> 
+</weight> 
+<weight index="4" value="0.066666667"> 
+</weight> 
+<weight index="5" value="0.133333333"> 
+</weight> 
+</objective> 
+<reservation value="0"/> 
+<optout value="0"/> 
+<weightmultiplyer value="0.1"> 
+</weightmultiplyer> 
+</utility_space> 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry path="" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/absolutelayout.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/activation.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/appframework-1.0.3.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jaxb1-impl.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jaxb-api.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jaxb-impl.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jaxb-xjc.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jcommon-1.0.13.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jfreechart-1.0.10.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jsr173_1.0_api.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/jtreetable.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/swing-layout-1.0.3.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/swing-worker-1.1.jar" kind="lib"/>
+	<classpathentry path="C:/Documents and Settings/Dinomaster/My Documents/school/in4010/svn/dep/junit-dep-4.6.jar" kind="lib"/>
+	<classpathentry path="" kind="output"/>
+</classpath>

@@ -1,0 +1,129 @@
+ROOT=<action:.*>
+
+<action:question:$1>:
+* <question:$1>
+<action:demand:$1:$2>:
+* <demand:$1:$2>
+<action:reject:$1>:
+* <reject:$1>
+<action:agree:$1:$2>:
+* <agree:$1:$2>
+<action:agree:$1>:
+* <agree:$1>
+<action:partial-agree:$1>:
+* <partial-agree:$1>
+<action:append>:
+* <append>
+<action:quit>:
+* <quit>
+<action:other>:
+* <other>
+
+<Issue:Salary>:
+* salary
+<Issue:Pension Fund>:
+* pension
+<Issue:Job Description>:
+* job description
+<Issue:Promotion Possibilities>:
+* promotion track
+<Issue:Working Hours>:
+* working hours
+<Issue:Leased Car>:
+* leased car
+
+<Salary:7,000 NIS>:
+* a salary of 7,000 NIS per month
+<Salary:12,000 NIS>:
+* a salary of 12,000 NIS per month
+<Salary:20,000 NIS>:
+* a salary of 20,000 NIS per month
+<Salary:$1>:
+* a salary of $1 per month
+
+<Pension:0>:
+* 0% pension
+<Pension:10>:
+* 10% pension
+<Pension:20>:
+* 20% pension
+<Pension:$1>:
+* $1(\d+)[%] pension
+
+<JobDescription:QA>:
+* QA
+<JobDescription:Programmer>:
+* Programmer
+<JobDescription:Team Manager>:
+* Team Manager
+<JobDescription:Project Manager>:
+* Project Manager
+
+<PromotionTrack:Fast>:
+* Fast promotion track
+<PromotionTrack:Slow>:
+* Slow promotion track
+
+<WorkingHours:8>:
+* 8 hours
+<WorkingHours:9>:
+* 9 hours
+<WorkingHours:10>:
+* 10 hours
+<WorkingHours:$1>:
+* $1(\d+) hours
+
+
+<question:agreement>:
+* Do we agree[?]?
+<question:final>:
+* Is there anything else we should discuss[?]?
+
+<partial-agree:$1>:
+* I accept your <Issue:$1> offer[,]?
+
+<agree:general>:
+* I accept your offer[.]?
+<partial-agree:general>:
+* I partially accept your offer[,]?
+<reject:general>:
+* I cannot accept your offer[.]?
+<reject:issue count:$1>:
+* I already accepted your conditions in $1(\d+) issues, I expect that you compromise on other issues[.]?
+
+<misunderstanding:general>:
+* Sorry, I didn't understand you[.]?
+<misunderstanding:issue:$1>:
+* $1 is not one of the issues in our discussion[.]?
+<misunderstanding:value:$1:$2>:
+* $1 is not one of the valid values for $2[.]?
+
+<happy:agree>:
+* I am happy that you agree[.]?
+* Good[.]?
+* Great[!]?
+* Excellent[.]?
+
+<disagree>:
+* I do not agree with you.
+
+<quit>:
+* I must leave this negotiation without an agreement.
+
+<append>:
+* I offer everything I offered before,
+
+<other>:
+* hi.
+* I am waiting.
+* My name is $1.
+* Other.
+
+<describe:final:$1>:
+* OK, It seems we have a deal: $1
+
+$1(\d+) USD:  {{comment|translate dollars}}
+* $1(\d+) USD
+* \$$1(\d+)
+* $1(\d+) dollars
+

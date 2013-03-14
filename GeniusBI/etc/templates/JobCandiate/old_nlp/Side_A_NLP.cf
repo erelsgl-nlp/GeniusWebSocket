@@ -1,0 +1,71 @@
+-- Rules Common to all domains and sides: 
+
+Action ::= Question | Demand | Reject | Agree | PartialAgree | Quit | Other
+Question_Agreement.   Question ::= "do" "we" "agree"
+Question_Final.       Question ::= "Is" "there" "anything" "else" "we" "should" "discuss"
+Agree_General.        Agree ::= "I" "accept" "your" "offer"  
+PartialAgree_Issue.   PartialAgree ::= "I" "accept" "your" Issue "offer"
+PartialAgree_General. PartialAgree ::= "I" "partially" "accept" "your" "offer"
+Reject_General.       Reject ::= "I" "cannot" "accept" "your" "offer"  
+Reject_IssueCount.    Reject ::= "I" "already" "accepted" "your" "conditions" "in" Int "issues," "I" "expect" "that" "you" "compromise" "on" "other" "issues"
+
+Misunderstanding_General. Misunderstanding ::= "Sorry," "I" "didn't" "understand" "you" 
+Misunderstanding_Issue.   Misunderstanding ::= String "is" "not" "one" "of" "the" "issues" "in" "our" "discussion"
+Misunderstanding_Value.   Misunderstanding ::= String "is" "not" "one" "of" "the" "valid" "values" "for" Issue
+
+Happiness ::= "I" "am" "happy" "that" "you" "agree" | "Good" | "Great" | "Excellent"
+DisagreeGeneral. Disagree ::= "I" "do" "not" "agree" "with" "you"
+QuitGeneral. Quit ::= "I" "must" "leave" "this" "negotiation" "without" "an" "agreement"
+Other ::= "hi" | "I" "am" "waiting" | "my" "name" "is" String | String
+
+
+-- Issues and Data types for Job Candidate domain - common to both sides:
+
+Issue  ::= "salary" | "pension" | "job" "description" | "promotion" "track" | "working" "hours" | "leased" "car"
+Salary ::= "7,000" | "12,000" | "20,000" | Int
+Pension ::= "0" | "10" | "20" | Int
+JobDescription ::= "QA" | "Programmer" | "Team" "Manager" | "Project" "Manager" | String
+PromotionTrack ::= "fast" | "slow" 
+WorkingHours ::= "8" | "9" | "10" | Float
+
+
+-- Rules Specific to employer: 
+
+Question_Initial. Question ::= "what" "are" "your" "demands"
+Question_Issue.   Question ::= "what" "are" "your" "demands" "regarding" Issue
+
+Question_Salary.  Question ::= "what" "are" "your" "salary" "demands"
+Demand_Salary.    Demand ::= "I" "want" "you" "to" "work" "for" Salary "NIS" "per" "month"
+Agree_Salary.     Agree ::= "I" "can" "agree" "to" "give" "you" Salary "NIS" "per" "month"
+YouAgree_Salary.  YouAgree ::= "you" "agree" "to" Salary "NIS" "per" "month"
+Reject_Salary.    Reject ::= "the" "salary" "you" "ask" "for" "is" "too" "high"
+
+Question_Job_Description. Question ::= "what" "would" "you" "like" "as" "your" "job" "description"
+Demand_Job_Description.   Demand ::= "I" "want" "you" "to" "work" "as" "a" JobDescription
+Agree_Job_Description.    Agree  ::= "I" "can" "offer" "you" "a" JobDescription "position"
+YouAgree_Job_Description. YouAgree ::= "you" "agree" "to" "work" "as" "a" JobDescription
+Reject_Job_Description.   Reject ::= "we" "do" "not" "need" "this" "job" "right" "now"
+
+Question_Leased_Car.      Question ::= "do" "you" "demand" "a" "leased" "car"
+Demand_Leased_Car_Without_Leased_Car. Demand ::= "I" "do" "not" "offer" "a" "company" "car"
+Demand_Leased_Car_With_Leased_Car. Demand ::= "I" "want" "to" "give" "you" "a" "company" "car"
+Agree_Leased_Car_With_Leased_Car.  Agree ::= "I" "can" "give" "you" "a" "company" "car"
+YouAgree_Leased_Car_Without_Leased_Car. YouAgree ::= "you" "can" "do" "without" "a" "company" "car"
+Reject_Leased_Car. Reject ::= "leased" "car" "is" "too" "expensive" "for" "us"
+
+Question_Promotion_Possibilities. Question ::= "what" "promotion" "track" "is" "the" "best" "for" "you"
+Demand_Promotion_Possibilities. Demand ::= "I" "can" "offer" "you" "a" PromotionTrack "promotion" "track"
+Agree_Promotion_Possibilities.  Agree ::=  "I" "can" "agree" "to" "a" PromotionTrack "promotion" "track"
+YouAgree_Promotion_Possibilities. YouAgree ::= "you" "agree" "to" "a" PromotionTrack "promotion" "track"
+Reject_Promotion_Possibilities. Reject ::= "I" "do" "not" "want" "to" "commit" "to" "this" "promotion" "track"
+
+Question_Working_Hours. Question ::= "how" "many" "hours" "would" "you" "like" "to" "work" "each" "day"
+Demand_Working_Hours. Demand ::= "I" "want" "you" "to" "work" "for" WorkingHours "hours" "a" "day"
+Agree_Working_Hours. Agree ::= "I" "can" "agree" "on" "a" "work" "day" "of" WorkingHours "hours" "a" "day"
+YouAgree_Working_Hours. YouAgree ::= "you" "agree" "to" "work" "for" WorkingHours "hours" "a" "day"
+Reject_Working_Hours. Reject ::= "we" "need" "you" "to" "work" "more" "hours"
+
+Demand_Pension_Fund. Demand ::= "I" "can" "give" Pension "%" "pension"
+Agree_Pension_Fund. Agree ::= "I" "can" "agree" "on" Pension "%" "pension"
+YouAgree_Pension_Fund. YouAgree ::= "you" "agree" "to" "a" Pension "%" "pension"
+Reject_Pension_Fund. Reject ::= "the" "pension" "you" "ask" "for" "is" "too" "high" "for" "us"

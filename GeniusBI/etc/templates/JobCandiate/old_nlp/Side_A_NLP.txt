@@ -1,0 +1,74 @@
+<question:initial>:
+* What are your demands[?]?
+
+<question:Salary>:
+* What are your salary demands[?]?
+<demand:Salary:$1>:
+* I would like you to work for <Salary:$1>[.]?
+<agree:Salary:$1>:
+* I can agree to give you <Salary:$1>[.]?
+<youagree:Salary:$1>:
+* you agree to <Salary:$1>[.]?
+<reject:Salary>:
+* The salary you ask for is too high[.]?
+
+<question:Job Description>:
+* What would you like as your job description[?]?
+<demand:Job Description:Other>:
+* I want you to work as a $1[.]?
+<demand:Job Description:$1>:
+* I want you to work as a <JobDescription:$1>[.]?
+<agree:Job Description:$1>:
+* I can offer you a <JobDescription:$1> position[.]?
+<youagree:Job Description:$1>:
+* you agree to work as a <JobDescription:$1>[.]?
+<reject:Job Description>:
+* We don't need this job right now[.]?
+
+<question:Leased Car>:
+* Do you demand a leased car[?]?
+<demand:Leased Car:Without leased car>:
+* I do not offer a company car[.]?
+<demand:Leased Car:With leased car>:
+* I want to give you a company car[.]?
+<agree:Leased Car:With leased car>:
+* I can give you a company car[.]?
+<youagree:Leased Car:Without leased car>:
+* you can do without a company car[.]?
+<reject:Leased Car>:
+* A leased car is too expensive for us[.]?
+
+<question:Promotion Possibilities>:
+* What promotion track is the best for you[?]?
+<demand:Promotion Possibilities:$1 promotion track>:
+* You will have a <PromotionTrack:$1>[.]?
+<agree:Promotion Possibilities:$1 promotion track>:
+* I can offer you a <PromotionTrack:$1>[.]?
+<youagree:Promotion Possibilities:$1 promotion track>:
+* you agree to a <PromotionTrack:$1>[.]?
+<reject:Promotion Possibilities>:
+* I don't want to commit to this promotion track[.]?
+
+<question:Working Hours>:
+* How many hours would you like to work each day[?]?
+<demand:Working Hours:$1 hours>:
+* I want you to work for <WorkingHours:$1> a day[.]?
+<agree:Working Hours:$1 hours>:
+* I can agree on a work day of <WorkingHours:$1>[.]?
+<youagree:Working Hours:$1 hours>:
+* you agree to work for <WorkingHours:$1> a day[.]?
+<reject:Working Hours>:
+* We need you to work more hours[.]?
+
+<demand:Pension Fund:$1%>:
+* I can give <Pension:$1>[.]?
+<agree:Pension Fund:$1%>:
+* I can agree on <Pension:$1>[.]?
+<youagree:Pension Fund:$1%>:
+* you agree to a <Pension:$1>[.]?
+<reject:Pension Fund>:
+* The pension you ask for is too high for us[.]?
+
+<question:$1>:
+* What are your demands regarding $1[?]?
+

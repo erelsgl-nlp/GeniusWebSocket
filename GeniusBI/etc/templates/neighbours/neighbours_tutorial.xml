@@ -1,0 +1,91 @@
+<utility_space> 
+<objective index="0" description="" name="root" type="objective" etype="objective"> 
+<issue index="1" name="Garbage" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER1 will put trash after 8pm" cost="0.0" evaluation="0"> 
+</item>               
+<item index="3" value="PLAYER1 will pay the doorman to take trash" cost="0.0" evaluation="10"> 
+</item>               
+<item index="4" value="PLAYER1 will put trash after 5:00pm" cost="0.0" evaluation="20"> 
+</item>               
+<item index="5" value="PLAYER1 will buy a special trash can" cost="0.0" evaluation="30"> 
+</item>               
+<item index="6" value="PLAYER1 will put trash on the stairwell" cost="0.0" evaluation="40"> 
+</item> 
+</issue>
+<issue index="2" name="Basketball court" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER1 will not use court on Saturday" cost="0.0" evaluation="0"> 
+</item>               
+<item index="3" value="PLAYER1 will leave court when PLAYER2 asks" cost="0.0" evaluation="10"> 
+</item>               
+<item index="4" value="PLAYER1 will use court for one hour" cost="0.0" evaluation="20"> 
+</item>               
+<item index="5" value="PLAYER1 will use court for two hours" cost="0.0" evaluation="30"> 
+</item>               
+<item index="6" value="PLAYER1 will continue to use court" cost="0.0" evaluation="40"> 
+</item> 
+</issue> 
+<issue index="3" name="Noise" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER2 will be quiet after 11pm" cost="0.0" evaluation="0"> 
+</item>               
+<item index="3" value="PLAYER2 will be quiet after 11:30pm" cost="0.0" evaluation="10"> 
+</item>               
+<item index="4" value="PLAYER2 will be quiet after 12am" cost="0.0" evaluation="20"> 
+</item>               
+<item index="5" value="PLAYER2 will be quiet on call" cost="0.0" evaluation="30"> 
+</item>               
+<item index="6" value="PLAYER2 will continue to be loud" cost="0.0" evaluation="40"> 
+</item> 
+</issue> 
+<issue index="4" name="Patio" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="PLAYER2 will continue to use patio" cost="0.0" evaluation="0"> 
+</item>               
+<item index="3" value="PLAYER2 will use patio for two hours every night" cost="0.0" evaluation="10"> 
+</item>               
+<item index="4" value="PLAYER2 will use patio for one hour every night" cost="0.0" evaluation="20"> 
+</item>               
+<item index="5" value="PLAYER2 will use patio for one hour every other night" cost="0.0" evaluation="30"> 
+</item>               
+<item index="6" value="PLAYER2 will not use patio" cost="0.0" evaluation="40"> 
+</item> 
+</issue> 
+<issue index="5" name="Parking lot" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-" cost="0.0" evaluation="0"> 
+</item> 
+<item index="2" value="Call the police" cost="0.0" evaluation="0"> 
+</item>               
+<item index="3" value="Recruit other residents" cost="0.0" evaluation="10"> 
+</item>               
+<item index="4" value="Donate money to install signs" cost="0.0" evaluation="20"> 
+</item>               
+<item index="5" value="Complain to the owner" cost="0.0" evaluation="30"> 
+</item>               
+<item index="6" value="Do nothing" cost="0.0" evaluation="40"> 
+</item> 
+</issue> 
+<weight index="1" value="0.2"> 
+</weight> 
+<weight index="2" value="0.2"> 
+</weight> 
+<weight index="3" value="0.2"> 
+</weight> 
+<weight index="4" value="0.2"> 
+</weight> 
+<weight index="5" value="0.2"> 
+</weight> 
+</objective> 
+<reservation value="280"/> 
+<optout value="280"/> 
+<weightmultiplyer value="5.0"> 
+</weightmultiplyer> 
+<opponent>
+	<utilityspace file="file:etc/templates/neighbours/neighbours_alex_opp.xml" />
+</opponent>
+</utility_space> 

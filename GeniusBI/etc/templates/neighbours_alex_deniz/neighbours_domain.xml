@@ -1,0 +1,89 @@
+<negotiation_template number_of_sessions="1"> 
+
+<utility_space number_of_issues="0"> 
+
+<agent utility_space="neighbours_alex.xml" owner="alex" type="1"></agent> 
+<agent utility_space="neighbours_tyler_opp.xml" owner="alex" type="2"></agent> 
+<agent utility_space="neighbours_tyler.xml" owner="tyler" type="1"></agent> 
+<agent utility_space="neighbours_alex_opp.xml" owner="tyler" type="2"></agent> 
+
+<objective index="6" description="" name="root" type="objective" etype="objective"> 
+<issue index="1" name="Garbage" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Alex will put trash after 8pm"> 
+</item> 
+<item index="3" value="Alex will pay the doorman to take trash"> 
+</item> 
+<item index="4" value="Alex will put trash after 5:00pm"> 
+</item> 
+<item index="5" value="Alex will buy a special trash can"> 
+</item> 
+<item index="6" value="Alex will put trash on the stairwell"> 
+</item>
+</issue> 
+<issue index="2" name="Basketball court" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Alex will not use court on Saturday"> 
+</item> 
+<item index="3" value="Alex will leave court when Deniz asks"> 
+</item> 
+<item index="4" value="Alex will use court for one hour"> 
+</item> 
+<item index="5" value="Alex will use court for two hours"> 
+</item> 
+<item index="6" value="Alex will continue to use court"> 
+</item> 
+</issue> 
+<issue index="3" name="Noise" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Deniz will be quiet after 11pm"> 
+</item> 
+<item index="3" value="Deniz will be quiet after 11:30pm"> 
+</item> 
+<item index="4" value="Deniz will be quiet after 12am"> 
+</item> 
+<item index="5" value="Deniz will be quiet on call"> 
+</item> 
+<item index="6" value="Deniz will continue to be loud"> 
+</item> 
+</issue> 
+<issue index="4" name="Patio" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Deniz will continue to use patio"> 
+</item> 
+<item index="3" value="Deniz will use patio for two hours every night"> 
+</item> 
+<item index="4" value="Deniz will use patio for one hour every night"> 
+</item> 
+<item index="5" value="Deniz will use patio for one hour every other night"> 
+</item> 
+<item index="6" value="Deniz will not use patio"> 
+</item> 
+</issue> 
+<issue index="5" name="Parking lot" vtype="discrete" type="discrete" etype="discrete"> 
+<item index="1" value="-"> 
+</item> 
+<item index="2" value="Call the police"> 
+</item> 
+<item index="3" value="Recruit other residents"> 
+</item> 
+<item index="4" value="Donate money to install signs"> 
+</item> 
+<item index="5" value="Complain to the owner"> 
+</item> 
+<item index="6" value="Do nothing"> 
+</item> 
+</issue> 
+<stateissue index="6" name="Punishment" vtype="discrete" type="discrete" etype="discrete">
+<item index="1" value="probation"> 
+</item> 
+<item index="2" value="advise to evict"> 
+</item> 
+</stateissue>
+</objective> 
+</utility_space> 
+</negotiation_template> 
