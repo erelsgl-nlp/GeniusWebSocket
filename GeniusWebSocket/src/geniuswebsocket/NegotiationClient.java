@@ -210,7 +210,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 					JSONObject arg0 = (JSONObject)args[0];
 					String speaker = (String)arg0.get("id");
 					String action = (String)arg0.get("action");
-					Object msg = (String)arg0.get("msg"); // can be either a string or a JSON object
+					Object msg = arg0.get("msg"); // can be either a String or a JSON object
 					boolean you = (Boolean)arg0.get("you");
 					System.out.println("  "+gameType+" "+speaker + (you? " (you)": "")+": "+action+" "+msg);
 					if (!you) {

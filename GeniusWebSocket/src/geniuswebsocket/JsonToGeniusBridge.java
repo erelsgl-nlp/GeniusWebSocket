@@ -63,7 +63,8 @@ public class JsonToGeniusBridge {
 	public static JSONObject deepMergeJsonObjects(JSONObject[] objects) throws JSONException {
 		JSONObject whole = new JSONObject();
 		for (JSONObject part: objects) {
-			for (Iterator<?> iKey = part.keys(); iKey.hasNext();) {
+			for (@SuppressWarnings("unchecked")
+			Iterator<String> iKey = (Iterator<String>)part.keys(); iKey.hasNext();) {
 				String key = (String)iKey.next();
 				Object value = part.get(key);
 				
@@ -79,6 +80,32 @@ public class JsonToGeniusBridge {
 		return whole;
 	}
 	
+	
+	public static void keysToLowerCase(JSONObject json) throws JSONException {
+		for (@SuppressWarnings("unchecked")
+		Iterator<String> iKey = (Iterator<String>)json.keys(); iKey.hasNext();) {
+			String key = iKey.next();
+			String keyLowerCase = key.toLowerCase();
+			if (key.equals(keyLowerCase))
+				continue;
+			Object value = json.get(key);
+			json.put(keyLowerCase, value);
+			json.remove(key);
+		}
+	}
+	
+	public static void keysToTitleCase(JSONObject json) throws JSONException {
+		for (@SuppressWarnings("unchecked")
+		Iterator<String> iKey = (Iterator<String>)json.keys(); iKey.hasNext();) {
+			String key = iKey.next();
+			String keyTitleCase = key.substring(0,1).toUpperCase() + key.substring(1).toLowerCase();
+			if (key.equals(keyTitleCase))
+				continue;
+			Object value = json.get(key);
+			json.put(keyTitleCase, value);
+			json.remove(key);
+		}
+	}
 
 	
 	/**
@@ -90,7 +117,7 @@ public class JsonToGeniusBridge {
 
 		Bid opponentLatestBid = opponentLatestBidAction==null? null: opponentLatestBidAction.getBid();
 		Bid speakerLatestBid = speakerLatestBidAction==null? null: speakerLatestBidAction.getBid();
-		
+		keysToTitleCase(json);
 		if (json.has("Offer")) {
 			JSONObject jsonBid = json.getJSONObject("Offer");
 			HashMap<Integer, Value> demandedBidValues = jsonObjectToGeniusBidValues(jsonBid, domain);
