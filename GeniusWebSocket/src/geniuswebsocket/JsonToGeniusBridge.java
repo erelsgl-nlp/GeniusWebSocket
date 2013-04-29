@@ -128,23 +128,23 @@ public class JsonToGeniusBridge {
 				actions.add(new Offer(thisAgent, theBid));
 			}
 		}
-		if (json.has("Accept")) {
+		if (json.has("accept")) {
 			if (opponentLatestBid==null) 
 				throw new NegotiatorException("What do you accept? I didn't offer anything");
 			actions.add(new Accept(thisAgent, opponentLatestBidAction));
 		}
-		if (json.has("Reject")) {
+		if (json.has("reject")) {
 			if (opponentLatestBid==null) 
 				throw new NegotiatorException("What do you reject? I didn't offer anything");
 			actions.add(new Reject(thisAgent, opponentLatestBidAction));
 		}
-		if (json.has("Quit")) {
+		if (json.has("quit")) {
 			actions.add(new EndNegotiation(thisAgent));
 		}
-		if (json.has("Insist")) {
+		if (json.has("insist")) {
 			if (speakerLatestBid==null) 
 				throw new NegotiatorException("What do you insist? You didn't offer anything");
-			String issueName = json.getString("Insist");
+			String issueName = json.getString("insist");
 			if (issueName.equals("previous")) {
 				actions.add(new Offer(thisAgent, speakerLatestBid));
 				//copyValuesForNonexistingKeys(agreedBidValues, speakerLatestBid.getValues());
