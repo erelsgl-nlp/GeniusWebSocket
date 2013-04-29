@@ -63,7 +63,8 @@ public class JsonToGeniusBridge {
 	public static JSONObject deepMergeJsonObjects(JSONObject[] objects) throws JSONException {
 		JSONObject whole = new JSONObject();
 		for (JSONObject part: objects) {
-			for (Iterator<?> iKey = part.keys(); iKey.hasNext();) {
+			for (@SuppressWarnings("unchecked")
+			Iterator<String> iKey = (Iterator<String>)part.keys(); iKey.hasNext();) {
 				String key = (String)iKey.next();
 				Object value = part.get(key);
 				
@@ -79,6 +80,19 @@ public class JsonToGeniusBridge {
 		return whole;
 	}
 	
+	
+	public static void keysToLowerCase(JSONObject json) throws JSONException {
+		for (@SuppressWarnings("unchecked")
+		Iterator<String> iKey = (Iterator<String>)json.keys(); iKey.hasNext();) {
+			String key = iKey.next();
+			String keyLowerCase = key.toLowerCase();
+			if (key.equals(keyLowerCase))
+				continue;
+			Object value = json.get(key);
+			json.put(keyLowerCase, value);
+			json.remove(key);
+		}
+	}
 
 	
 	/**
@@ -90,9 +104,9 @@ public class JsonToGeniusBridge {
 
 		Bid opponentLatestBid = opponentLatestBidAction==null? null: opponentLatestBidAction.getBid();
 		Bid speakerLatestBid = speakerLatestBidAction==null? null: speakerLatestBidAction.getBid();
-		
-		if (json.has("Offer")) {
-			JSONObject jsonBid = json.getJSONObject("Offer");
+		keysToLowerCase(json);
+		if (json.has("offer")) {
+			JSONObject jsonBid = json.getJSONObject("offer");
 			HashMap<Integer, Value> demandedBidValues = jsonObjectToGeniusBidValues(jsonBid, domain);
 			if (!demandedBidValues.isEmpty()) {
 				Bid theBid = new Bid(domain, demandedBidValues);
@@ -101,23 +115,23 @@ public class JsonToGeniusBridge {
 				actions.add(new Offer(thisAgent, theBid));
 			}
 		}
-		if (json.has("Accept")) {
+		if (json.has("accept")) {
 			if (opponentLatestBid==null) 
 				throw new NegotiatorException("What do you accept? I didn't offer anything");
 			actions.add(new Accept(thisAgent, opponentLatestBidAction));
 		}
-		if (json.has("Reject")) {
+		if (json.has("reject")) {
 			if (opponentLatestBid==null) 
 				throw new NegotiatorException("What do you reject? I didn't offer anything");
 			actions.add(new Reject(thisAgent, opponentLatestBidAction));
 		}
-		if (json.has("Quit")) {
+		if (json.has("quit")) {
 			actions.add(new EndNegotiation(thisAgent));
 		}
-		if (json.has("Insist")) {
+		if (json.has("insist")) {
 			if (speakerLatestBid==null) 
 				throw new NegotiatorException("What do you insist? You didn't offer anything");
-			String issueName = json.getString("Insist");
+			String issueName = json.getString("insist");
 			if (issueName.equals("previous")) {
 				actions.add(new Offer(thisAgent, speakerLatestBid));
 				//copyValuesForNonexistingKeys(agreedBidValues, speakerLatestBid.getValues());
