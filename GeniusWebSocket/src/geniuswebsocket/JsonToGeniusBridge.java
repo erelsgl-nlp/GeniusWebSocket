@@ -193,7 +193,7 @@ public class JsonToGeniusBridge {
 			JSONObject jsonBid = geniusBidToJsonObject(((Reject)geniusAction).getAcceptedOrRejectedAction().getBid(), domain);
 			json.put("Reject", jsonBid);
 		} else if (geniusAction instanceof Accept) {
-			JSONObject jsonBid = geniusBidToJsonObject(((Reject)geniusAction).getAcceptedOrRejectedAction().getBid(), domain);
+			JSONObject jsonBid = geniusBidToJsonObject(((Accept)geniusAction).getAcceptedOrRejectedAction().getBid(), domain);
 			json.put("Accept", jsonBid);
 		} else if (geniusAction instanceof EndNegotiation) {
 			json.put("Quit", true);

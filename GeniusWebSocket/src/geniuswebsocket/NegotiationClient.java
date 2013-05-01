@@ -264,7 +264,12 @@ public class NegotiationClient implements IOCallback, Cloneable {
 			System.out.println("    "+gameType+" partner actions in Genius: "+actionsGenius);
 			boolean actionIdentified = false;
 			for (Action action: actionsGenius) {
-				agent.ReceiveMessage(action);
+				try {
+					agent.ReceiveMessage(action);
+				} catch (Exception ex) {
+					sayToPartner("I could not handle the action '"+action+" because: "+ex+"!");
+					ex.printStackTrace();
+				}
 				if (action instanceof BidAction)
 					partnerLatestBidAction = (BidAction)action;
 				if (action instanceof Accept)
@@ -285,10 +290,10 @@ public class NegotiationClient implements IOCallback, Cloneable {
 		} catch (NegotiatorException ex) {
 			sayToPartner(ex.getMessage()+"!");
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			sayToPartner("I could not understand you because: "+ex+"!");
+			ex.printStackTrace();
 		}
-	}
+	} // onPartnerNegoActions
 
 	public void onPartnerAccept() {
 		agent.ReceiveMessage(new Accept());
