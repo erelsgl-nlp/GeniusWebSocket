@@ -540,7 +540,7 @@ public class Domain {
 			throw new RuntimeException("No utility spaces for owner "+owner);
 		String baseFilename = mapSideNameToUtilitySpace.get(owner).get(type);
 		if (baseFilename==null)
-			throw new RuntimeException("No utility spaces for owner "+owner+", type "+type);
+			throw new RuntimeException("No utility spaces for owner "+owner+", personality "+type+". Existing personalities: "+mapSideNameToUtilitySpace.get(owner).keySet());
 		return pathToDataFiles+File.separator+baseFilename;
 	}
 

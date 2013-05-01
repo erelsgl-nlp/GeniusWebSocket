@@ -65,6 +65,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	 * name of the game-class to join - from the games available on the game-server
 	 */
 	protected String gameType;
+	private String personalityOfThisAgent;
 
 
 	/**
@@ -73,21 +74,22 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	 * @param gameType name of the game-class to join - from the games available on the game-server.
 	 * @throws Exception
 	 */
-	public NegotiationClient(Domain domain, String serverUrl, String gameType) {
+	public NegotiationClient(Domain domain, String serverUrl, String gameType, String roleOfThisAgent, String personalityOfThisAgent, String roleOfOtherPlayer) {
 		this.domain = domain;
 		this.serverUrl = serverUrl;
 		this.gameType = gameType;
 		
-		roleOfThisAgent = "Candidate";
-		roleOfOtherPlayer = "Employer";
+		this.roleOfThisAgent = roleOfThisAgent;
+		this.roleOfOtherPlayer = roleOfOtherPlayer;
+		this.personalityOfThisAgent = personalityOfThisAgent;
 	}
 	
 	@Override public NegotiationClient clone() {
-		return new NegotiationClient(domain, serverUrl, gameType);
+		return new NegotiationClient(domain, serverUrl, gameType, roleOfThisAgent, personalityOfThisAgent, roleOfOtherPlayer);
 	}
 	
 	public void start() throws JSONException, IOException, NegotiatorException {
-		initializeAgent(roleOfThisAgent, roleOfOtherPlayer);
+		initializeAgent(roleOfThisAgent, personalityOfThisAgent, roleOfOtherPlayer);
 
 		negotiationSocket = new SocketIO();
 		negotiationSocket.connect(serverUrl, this);
@@ -111,7 +113,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	 *  @see  negotiator.protocol.asyncoffers.AsyncOffersBilateralAtomicNegoSession#run
 	 *  @see  negotiator.protocol.Protocol#loadWorldInformation
 	 */
-	protected void initializeAgent(String role, String partnerRole) throws IOException, NegotiatorException {
+	protected void initializeAgent(String role, String personality, String partnerRole) throws IOException, NegotiatorException {
 		agentIdOfThisAgent = new AgentID(role);
 		agentIdOfOtherPlayer = new AgentID(partnerRole);
 		
@@ -142,7 +144,7 @@ public class NegotiationClient implements IOCallback, Cloneable {
 		Integer turnLengthSeconds = 2*60;
 		HashMap<AgentParameterVariable, AgentParamValue> agentParams = new HashMap<AgentParameterVariable, AgentParamValue>();
 		
-		UtilitySpace agentUtilitySpace = domain.getUtilitySpace(role.toLowerCase(), "short-term");
+		UtilitySpace agentUtilitySpace = domain.getUtilitySpace(role.toLowerCase(), personality);
 		WorldInformation agentWorldInformation = domain.getAllUtilitySpaces(partnerRole.toLowerCase());
 		
 		agent.internalInit(
@@ -322,13 +324,26 @@ public class NegotiationClient implements IOCallback, Cloneable {
 	private static String thisClassName = Thread.currentThread().getStackTrace()[1].getClassName();
 	
 	public static void main(String[] args) throws Exception {
-		if (args.length<3) {
-			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-file> <url-of-negotiation-server> <game-types>");
+		if (args.length<2) {
+			System.err.println("SYNTAX: "+thisClassName+" <path-to-domain-folder> <url-of-negotiation-server> <game-types>");
 			System.exit(1);
 		}
 		java.util.logging.Logger.getLogger("io.socket").setLevel(Level.WARNING);
+		String pathToDomainFolder = args[0];
+		String serverUrl = args[1];
 
-		for (String gameType: args[2].split(",")) 
-			new NegotiationClient(new Domain(args[0]), args[1], gameType).start();  // Start the first client. It will launch new clients as the need arises.
+		new NegotiationClient(
+			new Domain(pathToDomainFolder+"/JobCandiate/JobCanDomain.xml"), 
+			serverUrl, 
+			"negomenus", "Candidate", "short-term",  "Employer").start();  // Start the first client. It will launch new clients as the need arises.
+		new NegotiationClient(
+			new Domain(pathToDomainFolder+"/JobCandiate/JobCanDomain.xml"), 
+			serverUrl, 
+			"negonlp", "Candidate", "short-term",  "Employer").start();  // Start the first client. It will launch new clients as the need arises.
+//		NOTE: currently we cannot play other domains, because we don't have the KBAgent configuration file: AgentConfigBneighbours_deniz.cfg
+//		new NegotiationClient(
+//			new Domain(pathToDomainFolder+"/neighbours_alex_deniz/neighbours_domain.xml"), 
+//			serverUrl, 
+//			"negomenus_neighbours", "Alex", "A",  "Deniz").start();  // Start the first client. It will launch new clients as the need arises.
 	}
 }
