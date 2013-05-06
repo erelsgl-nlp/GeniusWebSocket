@@ -2,10 +2,10 @@
 
 <utility_space number_of_issues="0"> 
 
-<agent utility_space="neighbours_alex.xml" owner="alex" type="1"></agent> 
-<agent utility_space="neighbours_tyler_opp.xml" owner="alex" type="2"></agent> 
-<agent utility_space="neighbours_tyler.xml" owner="tyler" type="1"></agent> 
-<agent utility_space="neighbours_alex_opp.xml" owner="tyler" type="2"></agent> 
+<agent utility_space="neighbours_alex.xml" owner="alex" personality="1"></agent> 
+<agent utility_space="neighbours_deniz_opp.xml" owner="alex" personality="2"></agent> 
+<agent utility_space="neighbours_deniz.xml" owner="deniz" personality="1"></agent> 
+<agent utility_space="neighbours_alex_opp.xml" owner="deniz" personality="2"></agent> 
 
 <objective index="6" description="" name="root" type="objective" etype="objective"> 
 <issue index="1" name="Garbage" vtype="discrete" type="discrete" etype="discrete"> 
